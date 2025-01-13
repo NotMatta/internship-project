@@ -1,48 +1,107 @@
 "use client"
 import { createContext, useState, useEffect, useContext } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { validatePassword, validateUsername } from "@/lib/utils";
 
 const SessionContext = createContext();
 
+
 const SessionProvider = ({ children }) => {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState({user:null,token:null,status:"loading"});
+  const {toast} = useToast()
   
-  const verifySession = async () => {
-    //send the token to the server to verify it returning true or false
-    console.log("Verifying session");
-    return True
-  }
 
   useEffect(() => {
-    const session = JSON.parse(localStorage.getItem("session"));
-    if (session) {
-      verifySession(session.token).then((isValid) => {
+    const verifySession = async (token) => {
+      if(!token) return false
+      const res = await fetch("http://localhost:3000/api/auth/validate", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("res of validation",res)
+      return true;
+    }
+    const getLocalSession = async () => {
+      const localSession = JSON.parse(localStorage.getItem("session"));
+      if (localSession) {
+        const isValid = await verifySession(localSession.token)        
         if (isValid) {
-          setSession(session);
+          setSession({...localSession,status:"authenticated"});
+          return
         } else {
           localStorage.removeItem("session");
-          setSession(null);
+          setSession((old) => ({...old,status:"unauthenticated"}))
         }
-      });
+        return
+      }
+      setSession((old) => ({...old,status:"unauthenticated"}))
     }
+    getLocalSession();
   }, []);
 
   const signOut = () => {
     localStorage.removeItem("session");
-    setSession(null);
+    setSession({user:null,token:null,status:"unauthenticated"})
   }
 
-  const signUp = (credentials) => {
-    //send the credentials to the server to get a token
+  const signUp = async (credentials) => {
+    const {name,email,password,cpassword} = {name:credentials.get("name"),email:credentials.get("email"),password:credentials.get("password"),cpassword:credentials.get("cpassword")};
     console.log("Signing in",credentials);
+    if(validateUsername(name) !== "Username is valid."){
+      toast({title:"Invalid credentials",description:validateUsername(name)})
+      return
+    }
+    if(password !== cpassword){
+      toast({title:"Invalid credentials",description:"Passwords do not match"})     
+      return
+    }
+    if(validatePassword(password) !== "Password is valid."){
+      toast({title:"Invalid credentials",description:validatePassword(password)})
+      return
+    }
+    const res = await fetch("http://localhost:3000/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({name,email,password}),
+    })
+    
+    if(res.ok) {
+      const {user,token} = await res.json()
+      console.log({user,token})
+      localStorage.setItem("session", JSON.stringify({user,token}))
+      alert("check your stuff")
+      setSession({user,token,status:"authenticated"})
+      return
+    }
+    const message = await res.json()
+    toast({title:"Couldn't create an account",description:message})
+    
   }
 
-  const LogIn = (credentials) => {
-    //send the credentials to the server to get a token
-    console.log("Logging in",credentials);
+  const logIn = async (credentials) => {
+    const {email,password} = {email:credentials.get("email"),password:credentials.get("password")};
+    if(validatePassword(password) !== "Password is valid."){
+      toast({title:"Invalid credentials",description:validatePassword(password)})
+      return
+    }
+    const res = await fetch("http://localhost:3000/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({email,password}),
+    })
+    if(res.ok) {
+      const {user,token} = await res.json()
+      console.log({user,token})
+      localStorage.setItem("session", JSON.stringify({user,token}))
+      alert("check your stuff")
+      setSession({user,token,status:"authenticated"})
+      return
+    }
+    const message = await res.json()
+    toast({title:"Couldn't create an account",description:message})
   }
 
   return (
-    <SessionContext.Provider value={{session, signOut, signUp, LogIn}}>
+    <SessionContext.Provider value={{session, signOut, signUp, logIn}}>
       {children}
     </SessionContext.Provider>
   );
