@@ -1,5 +1,5 @@
 "use client"
-const { useSession } = require("@/components/session-manager");
+const { useSession } = require("@/components/providers/session-provider");
 const { redirect } = require("next/navigation");
 
 const AuthLayout = ({children}) => {

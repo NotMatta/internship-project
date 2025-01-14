@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken"
 import prisma from "@/prisma/prisma-client"
 
 export const GET = async (req) => {
+  console.log("validation called")
   try{
     const token = req.headers.get("authorization").split(" ")[1]
     if(!token){

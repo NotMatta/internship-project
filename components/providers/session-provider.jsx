@@ -12,9 +12,10 @@ const SessionProvider = ({ children }) => {
   
 
   useEffect(() => {
+
     const verifySession = async (token) => {
       if(!token) return false
-      const res = await fetch("http://localhost:3000/api/auth/validate", {
+      const res = await fetch("/api/auth/validate", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -22,6 +23,7 @@ const SessionProvider = ({ children }) => {
       console.log("res of validation",res)
       return true;
     }
+
     const getLocalSession = async () => {
       const localSession = JSON.parse(localStorage.getItem("session"));
       if (localSession) {
@@ -60,7 +62,7 @@ const SessionProvider = ({ children }) => {
       toast({title:"Invalid credentials",description:validatePassword(password)})
       return
     }
-    const res = await fetch("http://localhost:3000/api/auth/register", {
+    const res = await fetch("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({name,email,password}),
     })
@@ -69,7 +71,6 @@ const SessionProvider = ({ children }) => {
       const {user,token} = await res.json()
       console.log({user,token})
       localStorage.setItem("session", JSON.stringify({user,token}))
-      alert("check your stuff")
       setSession({user,token,status:"authenticated"})
       return
     }
@@ -84,7 +85,7 @@ const SessionProvider = ({ children }) => {
       toast({title:"Invalid credentials",description:validatePassword(password)})
       return
     }
-    const res = await fetch("http://localhost:3000/api/auth/login", {
+    const res = await fetch("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({email,password}),
     })
@@ -92,7 +93,6 @@ const SessionProvider = ({ children }) => {
       const {user,token} = await res.json()
       console.log({user,token})
       localStorage.setItem("session", JSON.stringify({user,token}))
-      alert("check your stuff")
       setSession({user,token,status:"authenticated"})
       return
     }

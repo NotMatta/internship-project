@@ -7,28 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   email String @unique
   name  String
   password String
+  role Role @default(USER)
   credentials Credential[]
 }
 
 model Credential {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  applicationId String @map("_applicationId") @db.ObjectId
-  application Application @relation(fields: [applicationId], references: [id])
+  name String
   email String
   password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   userId String @map("_userId") @db.ObjectId
   user  User   @relation(fields: [userId], references: [id])
-}
-
-model Application {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
-  website String
-  Image  String
-  Credentials Credential[]
 }
