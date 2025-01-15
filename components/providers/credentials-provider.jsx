@@ -1,6 +1,7 @@
 "use client"
 import { useContext, createContext, useEffect, useState } from "react";
 import { useSession } from "./session-provider";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const credentialsContext = createContext();
 
@@ -8,22 +9,47 @@ const CredentialsProvider = ({ children }) => {
   const { session } = useSession();
   console.log("Credentials provider loaded !");
 
-  const createCredential = async (formData) => {
-    alert("Creating credentials");
-    console.log("Creating credentials", formData,"with",session.token);
-    const { name, website, email, password } =  {name:formData.get("name"),website:formData.get("website"),email:formData.get("email"),password:formData.get("password")};
-      const res = await fetch("/api/credentials", {
-      method: "POST",
+  const queryClient = useQueryClient()
+
+  const {data,loading,error} = useQuery({queryKey:['credentials'],queryFn: async () => {
+    const res = await fetch("/api/credentials", {
       headers: {
         Authorization: `Bearer ${session.token}`,
-      },
-      body: JSON.stringify({ name, website, email, password }),
-    });
-    console.log((await res.json()))
-  }
+      }
+    })
+    if(!res.ok){
+      throw new Error("Failed to fetch credentials")
+    }
+    return res.json()
+  }})
+
+  const createCredential = useMutation({
+    mutationFn: async (formData) => {
+      console.log("Creating credentials", formData,"with",session.token);
+    const { name, email, password } =  {name:formData.get("name"),email:formData.get("email"),password:formData.get("password")};
+      const res = await fetch("/api/credentials", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({name,email,password}),
+      });
+      if(!res.ok) throw new Error("Failed to create credentials")
+      return res.json()
+    },
+    onError: (error) => {
+      console.log("Error creating credentials",error)
+    },
+    onSuccess: (newData) => {
+      console.log("Credentials created",newData)
+      queryClient.setQueryData(['credentials'],(oldData) => [...oldData,newData])
+    }
+  })
+
+  if(error) return <div>Something Happened :p</div>
 
   return(
-    <credentialsContext.Provider value={{createCredential}}>
+    <credentialsContext.Provider value={{createCredential,credentials:{data,loading,error}}}>
       {children}
     </credentialsContext.Provider>
   )

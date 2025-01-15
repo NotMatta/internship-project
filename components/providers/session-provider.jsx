@@ -20,8 +20,7 @@ const SessionProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("res of validation",res)
-      return true;
+      return res.ok;
     }
 
     const getLocalSession = async () => {

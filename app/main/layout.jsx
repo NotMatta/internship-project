@@ -10,10 +10,9 @@ const MainLayout = ({ children }) => {
   if (session.status === "loading") return <div>Loading...</div>
   console.log(session)
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-screen h-screen">
       <Navbar/>
-      <div className="w-full h-full p-4">
-        {session.token}
+      <div className="w-0 flex-grow h-full p-4">
         {children}
       </div>
     </div>

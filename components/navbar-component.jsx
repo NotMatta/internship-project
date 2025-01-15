@@ -1,7 +1,8 @@
 "use client"
-import { AppWindow, KeyRound, LayoutDashboard, Lock, User } from "lucide-react"
+import { AppWindow, KeyRound, LayoutDashboard, Lock, Shield, User } from "lucide-react"
 import { useEffect, useState, useContext, createContext } from "react"
 import Link from "next/link"
+import { useSession } from "./providers/session-provider"
 
 const pathContext = createContext("")
 
@@ -22,6 +23,7 @@ const NavLink = ({children,href}) => {
 
 const Navbar = () => {
   const [path, setPath] = useState("")
+  const {session} = useSession()
   useEffect(() => {
     setPath(window.location.pathname.split("/").pop())
   }, [])
@@ -34,6 +36,7 @@ const Navbar = () => {
           <NavLink href="/main/accounts"><AppWindow/>Accounts</NavLink>
           <NavLink href="/main/passwords"><KeyRound/>Passwords</NavLink>
           <NavLink href="/main/profile"><User/>Profile</NavLink>
+          {session.user.roleId == "ADMIN" && <NavLink href="/main/admin"><Shield/>Admin Panel</NavLink>}
         </pathContext.Provider>
       </nav>
     </div>
