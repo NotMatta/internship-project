@@ -36,7 +36,7 @@ const Navbar = () => {
           <NavLink href="/main/accounts"><AppWindow/>Accounts</NavLink>
           <NavLink href="/main/passwords"><KeyRound/>Passwords</NavLink>
           <NavLink href="/main/profile"><User/>Profile</NavLink>
-          {session.user.roleId == "ADMIN" && <NavLink href="/main/admin"><Shield/>Admin Panel</NavLink>}
+          {session.user.role == "ADMIN" && <NavLink href="/main/admin"><Shield/>Admin Panel</NavLink>}
         </pathContext.Provider>
       </nav>
     </div>

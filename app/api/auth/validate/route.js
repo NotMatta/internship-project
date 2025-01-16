@@ -10,9 +10,12 @@ export const GET = async (req) => {
     }
     try{
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      const user = await prisma.user.findUnique({where: {id: decoded.id}})
+      const user = await prisma.user.findUnique({where: {id: decoded.id}, include:{role:true}})
       if(!user){
         return Response.json("User not found", {status: 404})
+      }
+      if(user.roleId != decoded.roleId){
+        return Response.json("Unauthorized", {status: 401})
       }
       return Response.json({user}, {status: 200})
     }

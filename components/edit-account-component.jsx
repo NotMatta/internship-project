@@ -9,16 +9,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import { Input } from "./ui/input";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useCredentials } from "./providers/credentials-provider";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-const AddAccount = () => {
+const EditAccount = ({account}) => {
 
-  const {createCredential} = useCredentials()
+  const {editCredential} = useCredentials()
   const [res, setResponse] = useState("none");
   const {toast} = useToast()
 
@@ -29,10 +29,16 @@ const AddAccount = () => {
       setResponse("invalid");
       return
     }
-    await createCredential.mutate(formData);
-    if(createCredential.isError){
+    if(account.name == formData.get("name") && account.email == formData.get("email") && account.password == formData.get("password")){
+      console.log("No changes made")
+      setResponse("invalid");
+      return
+    }
+    await editCredential.mutate(formData);
+    if(editCredential.isError){
       setResponse("error");
-      toast({title:"Failed to add account",description:"An error occured while adding the account"})
+      toast({title:"Failed to edit account",description:"An error occured while editing the account"})
+
       return
     }
     setResponse("success");
@@ -41,36 +47,36 @@ const AddAccount = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="icon"><Plus/></Button>
+        <Button size="icon"><SquarePen/></Button>
       </DialogTrigger>
       <DialogContent>
         {res != "success" ? <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Adding a new account</DialogTitle>
+            <DialogTitle>Editing an account</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Fill in the form below to add a new account</DialogDescription>
+          <DialogDescription>Fill in the form below to edit this account</DialogDescription>
           {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
           <div className="space-y-2">
-            <Input name="name" type="text" placeholder="Account Name" required/>
-            <Input name="email" type="email" placeholder="Email" required/>
-            <Input name="password" type="password" placeholder="Password" required/>
+            <Input name="name" type="text" placeholder="Account Name" defaultValue={account.name} required/>
+            <Input name="email" type="email" placeholder="Email" defaultValue={account.email} required/>
+            <Input name="password" type="password" placeholder="Password" defaultValue={account.password} required/>
+            <input type="hidden" name="id" defaultValue={account.id}/>
           </div>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Add Account</Button>
+            <Button type="submit">Save Edit</Button>
           </DialogFooter>
         </form>:
           <div>
           <DialogHeader>
-            <DialogTitle>Successfully added a new account!</DialogTitle>
+            <DialogTitle>Successfully Saved the edit!</DialogTitle>
           </DialogHeader>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button onClick={() => setResponse("none")}>Close</Button>
             </DialogClose>
-            <Button onClick={() => setResponse("none")}>Add Another</Button>
           </DialogFooter>
           </div>
         }
@@ -79,4 +85,4 @@ const AddAccount = () => {
   );
 }
 
-export default AddAccount;
+export default EditAccount

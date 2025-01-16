@@ -12,9 +12,8 @@ const LoginForm = () => {
       <Input type="email" placeholder="Email..." name="email" required/>
       <Input type="password" placeholder="Password..." name="password" required/>
       <Button type="submit">Login</Button>
-      <Link href="/auth/reset">Forgot password?</Link>
       <hr/>
-      <Link href="/auth/register">Create an account!</Link>
+      <Link href="/auth/reset">Forgot password?</Link>
     </form>
   )
 }

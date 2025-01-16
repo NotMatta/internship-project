@@ -37,19 +37,57 @@ const CredentialsContextProvider = ({ children }) => {
       if(!res.ok) throw new Error("Failed to create credentials")
       return res.json()
     },
-    onError: (error) => {
-      console.log("Error creating credentials",error)
-    },
     onSuccess: (newData) => {
       console.log("Credentials created",newData)
       queryClient.setQueryData(['credentials'],(oldData) => [...oldData,newData])
     }
   })
 
+  const editCredential = useMutation({
+    mutationFn: async (formData) => {
+      console.log("Editing credentials", formData,"with",session.token);
+      const { name, email, password, id } =  {name:formData.get("name"),email:formData.get("email"),password:formData.get("password"),id:formData.get("id")};
+      console.log({name,email,password,id})
+      const res = await fetch("/api/credentials", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({name,email,password,id}),
+      });
+      if(!res.ok) throw new Error("Failed to edit credentials")
+      return res.json()
+    },
+    onSuccess: (newData) => {
+      console.log("Credentials edited",newData)
+      queryClient.setQueryData(['credentials'],(oldData) => oldData.map((data) => data.id == newData.id ? newData : data))
+    }
+  })
+
+  const deleteCredential = useMutation({
+    mutationFn: async (formData) => {
+      console.log("Deleting credentials", formData,"with",session.token);
+      const { id } =  {id:formData.get("id")};
+      const res = await fetch("/api/credentials", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({id}),
+      });
+      if(!res.ok) throw new Error("Failed to delete credentials")
+      return res.json()
+    },
+    onSuccess: (newData) => {
+      console.log("Credentials deleted",newData)
+      queryClient.setQueryData(['credentials'],(oldData) => oldData.filter((data) => data.id != newData.id))
+    }
+  })
+
   if(error) return <div>Something Happened :p</div>
 
   return(
-    <credentialsContext.Provider value={{createCredential,credentials:{data,loading,error}}}>
+    <credentialsContext.Provider value={{createCredential,editCredential,deleteCredential,credentials:{data,loading,error}}}>
       {children}
     </credentialsContext.Provider>
   )

@@ -61,20 +61,26 @@ const SessionProvider = ({ children }) => {
       toast({title:"Invalid credentials",description:validatePassword(password)})
       return
     }
+    console.log("verified credentials");
     const res = await fetch("/api/auth/register", {
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
       method: "POST",
       body: JSON.stringify({name,email,password}),
     })
+    console.log("sent request")
     
     if(res.ok) {
-      const {user,token} = await res.json()
-      console.log({user,token})
-      localStorage.setItem("session", JSON.stringify({user,token}))
-      setSession({user,token,status:"authenticated"})
-      return
+      alert("Account created successfully")
+      const {user,message} = await res.json()
+      console.log({user,message})
+      return true
     }
+    alert("Couldn't create an account")
     const message = await res.json()
     toast({title:"Couldn't create an account",description:message})
+    return false
     
   }
 
