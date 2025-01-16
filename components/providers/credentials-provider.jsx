@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const credentialsContext = createContext();
 
-const CredentialsProvider = ({ children }) => {
+const CredentialsContextProvider = ({ children }) => {
   const { session } = useSession();
   console.log("Credentials provider loaded !");
 
@@ -53,6 +53,14 @@ const CredentialsProvider = ({ children }) => {
       {children}
     </credentialsContext.Provider>
   )
+}
+
+const CredentialsProvider = ({ children }) => {
+  const { session } = useSession();
+  if (session.status == "authenticated") {
+    return <CredentialsContextProvider>{children}</CredentialsContextProvider>;
+  }
+  return children;
 }
 
 const useCredentials = () => {
