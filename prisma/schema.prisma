@@ -10,6 +10,8 @@ datasource db {
 model Role {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   users User[]
 }
 
@@ -18,15 +20,26 @@ model User {
   email String @unique
   name  String
   password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   roleId String @map("_roleId") @db.ObjectId @default("67877aff355d2387331e1987")
   role Role @relation(fields: [roleId], references: [id])
-  credentials Credential[]
+  applications Application[]
+  logs Log[]
 }
 
-model Credential {
+enum adressType {
+  URL
+  IP
+}
+
+model Application {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  username String
+  logo String @default("https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png")
+  type adressType
+  address String
+  login String
   password String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -34,3 +47,19 @@ model Credential {
   user  User   @relation(fields: [userId], references: [id])
 }
 
+enum ActionType {
+  LOGIN
+  LOGOUT
+  CREATE
+  UPDATE
+  DELETE
+}
+
+model Log {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  message String
+  action ActionType
+  date DateTime
+  userId String @map("_userId") @db.ObjectId
+  user  User   @relation(fields: [userId], references: [id])
+}

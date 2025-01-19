@@ -32,11 +32,11 @@ A more serious version with more features:
 - prisma
 
 **Tasks**:
-- [ ] Init the project
-- [ ] Setup the database
-- [ ] Create the authentication system
+- [X] Init the project
+- [X] Setup the database
+- [X] Create the authentication system
 - [ ] Create the dashboard
-- [ ] Create the accounts
-- [ ] Create the passwords
+- [X] Create the accounts
+- [X] Create the passwords
 - [ ] Create the profile
 - [ ] Deploy the project

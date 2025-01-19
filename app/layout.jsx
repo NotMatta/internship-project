@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import QueryProvider from "@/components/providers/query-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { CredentialsProvider } from "@/components/providers/credentials-provider";
+import { ApplicationsProvider } from "@/components/providers/applications-provider";
 
 export const metadata = {
   title: "OTC Password Manager",
@@ -18,9 +18,9 @@ export default function RootLayout({ children }) {
         <QueryProvider>
           <ThemeProvider defaultTheme="dark" attribute="class" enableSystem>
             <SessionProvider>
-              <CredentialsProvider>
+              <ApplicationsProvider>
                 {children}
-              </CredentialsProvider>
+              </ApplicationsProvider>
             </SessionProvider>
           </ThemeProvider>
         </QueryProvider>

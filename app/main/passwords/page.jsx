@@ -2,16 +2,21 @@
 import EditApp from "@/components/edit-app-component";
 import DeleteApp from "@/components/delete-app.component";
 import { useState, useEffect } from "react";
-import { useCredentials } from "@/components/providers/credentials-provider";
+import { useApplications } from "@/components/providers/applications-provider";
 import {calculatePasswordScore as score, calculatePasswordStrength as strength, getAgeInDays as age} from "@/lib/utils";
 
-const PasswordRow = ({credential,passwords}) => {
-  const passwordAge = age(credential.updatedAt);
-  const passwordStrength = strength(credential.password,passwordAge,passwords);
-  const passwordScore = score(credential.password);
+const PasswordRow = ({application,passwords}) => {
+  const passwordAge = age(application.updatedAt);
+  const passwordStrength = strength(application.password,passwordAge,passwords);
+  const passwordScore = score(application.password);
   return (
     <tr className="[&>td]:p-2 border">
-      <td>{credential.name}<br/>{credential.username}</td>
+      <td>
+        <div className="flex items-center gap-2">
+          <img src={application.logo} className="h-10 w-10 rounded-full"/>
+          <>{application.name}<br/>{application.address}</>
+        </div>
+      </td>
       <td>
         {passwordScore}%
         <div className="bg-accent h-3 w-full rounded-xl">
@@ -22,8 +27,8 @@ const PasswordRow = ({credential,passwords}) => {
       <td>{passwordStrength}</td>
       <td>
         <div className="flex justify-end gap-2">
-          <EditApp application={credential}/>
-          <DeleteApp application={credential}/>
+          <EditApp application={application}/>
+          <DeleteApp application={application}/>
         </div>
     </td>
     </tr>
@@ -32,11 +37,11 @@ const PasswordRow = ({credential,passwords}) => {
 
 const PasswordsPage = () => {
 
-  const credentials = useCredentials().credentials.data;
+  const applications = useApplications().applications.data;
   const [passwords, setPasswords] = useState([]);
   useEffect(() => {
-    setPasswords(credentials);
-  }, [credentials])
+    setPasswords(applications);
+  }, [applications])
 
   return (
     <div className="max-h-full overflow-scroll">
@@ -52,9 +57,9 @@ const PasswordsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {credentials && credentials.map((credential) => (
+          {applications && applications.map((application) => (
             <>
-            <PasswordRow key={credential.id} credential={credential} passwords={passwords}/>
+            <PasswordRow key={application.id} application={application} passwords={passwords}/>
             </>
           ))}
         </tbody>

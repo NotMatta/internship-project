@@ -12,32 +12,46 @@ import { Button } from "./ui/button";
 import { Plus, Eye, EyeOff } from "lucide-react";
 import { Input } from "./ui/input";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useCredentials } from "./providers/credentials-provider";
-import { useState } from "react";
+import { useApplications } from "./providers/applications-provider";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 const AddApp = () => {
 
-  const {createCredential} = useCredentials()
+  const {createApplication,mutationStatus,setMutationStatus} = useApplications()
   const [displayPassword,setDisplayPassword] = useState(false);
   const [res, setResponse] = useState("none");
+  const [logo, setLogo] = useState("");
   const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMutationStatus("loading")
     const formData = new FormData(e.target);
-    if(!formData.get("name") || !formData.get("username") || !formData.get("password")){
-      setResponse("invalid");
-      return
-    }
-    await createCredential.mutate(formData);
-    if(createCredential.isError){
-      setResponse("error");
-      toast({title:"Failed to add application",description:"An error occured while adding the application"})
-      return
-    }
-    setResponse("success");
+    if (!logo) formData.set("logo","https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png")
+    console.log(formData)
+    createApplication.mutate(formData)
   }
+
+  useEffect(() => {
+    if(mutationStatus == "a_success"){
+      setResponse("success")
+      setMutationStatus("none")
+    }
+    if(mutationStatus == "a_error"){
+      setResponse("error")
+      setMutationStatus("none")
+      toast({title:"Failed to add application",description:"An error occured while adding the application"})
+    }
+  },[mutationStatus,setMutationStatus,toast])
 
   return (
     <Dialog>
@@ -52,8 +66,24 @@ const AddApp = () => {
           <DialogDescription>Fill in the form below to add a new application</DialogDescription>
           {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
           <div className="space-y-2">
+            <div className="flex gap-2 items-center">
+              <Input name="logo" type="text" placeholder="Logo url ~ " value={logo} onChange={e => setLogo(e.target.value)}/>
+              <img src={logo ? logo : "https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png"} alt="logo" className="w-12 h-12"/>
+            </div>
             <Input name="name" type="text" placeholder="Application Name" required/>
-            <Input name="username" type="text" placeholder="Username.." required/>
+            <Input name="login" type="text" placeholder="Username / Email / Phone.." required/>
+            <div className="flex gap-2">
+              <Input name="address" type="text" placeholder="Address" required/>
+                <Select name="type" required={true}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Address type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="URL">URL</SelectItem>
+                  <SelectItem value="IP">IP</SelectItem>
+                </SelectContent>
+              </Select>             
+            </div>
             <div className="flex gap-2">
               <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Password" required/>
               <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
@@ -63,7 +93,7 @@ const AddApp = () => {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Add Application</Button>
+            <Button type="submit" disabled={mutationStatus == "loading"}>Add Application</Button>
           </DialogFooter>
         </form>:
           <div>
@@ -72,7 +102,7 @@ const AddApp = () => {
           </DialogHeader>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline" onClick={() => setResponse("none")}>Close</Button>
             </DialogClose>
             <Button onClick={() => setResponse("none")}>Add Another</Button>
           </DialogFooter>

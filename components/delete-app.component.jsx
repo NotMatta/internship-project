@@ -11,24 +11,32 @@ import {
 import { Button } from "./ui/button";
 import { Trash } from "lucide-react";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useCredentials } from "./providers/credentials-provider";
+import { useApplications } from "./providers/applications-provider";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 const DeleteApp = ({application}) => {
 
-  const {deleteCredential} = useCredentials()
+  const {deleteApplication,mutationStatus,setMutationStatus} = useApplications()
   const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMutationStatus("loading")
     const formData = new FormData(e.target);
-    await deleteCredential.mutate(formData);
-    if(deleteCredential.isError){
-      toast({title:"Failed to delete application",description:"An error occured while deleting the application"})
-      return
-    }
-    toast({title:"Account deleted",description:"The account has been deleted"})
+    await deleteApplication.mutate(formData);
   }
+
+  useEffect(() => {
+    if(mutationStatus == "d_success"){
+      setMutationStatus("none")
+      toast({title:"Application deleted",description:"The application has been deleted"})
+    }
+    if(mutationStatus == "d_error"){
+      setMutationStatus("none")
+      toast({title:"Failed to delete application",description:"An error occured while deleting the application"})
+    }
+  },[mutationStatus,setMutationStatus,toast])
 
   return (
     <Dialog>
@@ -47,7 +55,7 @@ const DeleteApp = ({application}) => {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit" variant="destructive">Delete Application</Button>
+              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Delete Application</Button>
             </DialogClose>
           </DialogFooter>
         </form>      
