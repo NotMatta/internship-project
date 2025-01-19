@@ -9,36 +9,36 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "./ui/button";
-import { SquarePen } from "lucide-react";
+import { Eye, EyeOff, SquarePen } from "lucide-react";
 import { Input } from "./ui/input";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useCredentials } from "./providers/credentials-provider";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-const EditAccount = ({account}) => {
+const EditApp = ({application}) => {
 
   const {editCredential} = useCredentials()
+  const [displayPassword,setDisplayPassword] = useState(false);
   const [res, setResponse] = useState("none");
   const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    if(!formData.get("name") || !formData.get("email") || !formData.get("password")){
+    if(!formData.get("name") || !formData.get("username") || !formData.get("password")){
       setResponse("invalid");
       return
     }
-    if(account.name == formData.get("name") && account.email == formData.get("email") && account.password == formData.get("password")){
-      console.log("No changes made")
+    if(application.name == formData.get("name") && application.username == formData.get("username") && application.password == formData.get("password")){
+      toast({title:"Invalid",description:"No changes made to the application"})
       setResponse("invalid");
       return
     }
     await editCredential.mutate(formData);
     if(editCredential.isError){
       setResponse("error");
-      toast({title:"Failed to edit account",description:"An error occured while editing the account"})
-
+      toast({title:"Failed to edit application",description:"An error occured while editing the application"})
       return
     }
     setResponse("success");
@@ -52,15 +52,18 @@ const EditAccount = ({account}) => {
       <DialogContent>
         {res != "success" ? <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Editing an account</DialogTitle>
+            <DialogTitle>Editing an application</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Fill in the form below to edit this account</DialogDescription>
+          <DialogDescription>Fill in the form below to edit this application</DialogDescription>
           {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
           <div className="space-y-2">
-            <Input name="name" type="text" placeholder="Account Name" defaultValue={account.name} required/>
-            <Input name="email" type="email" placeholder="Email" defaultValue={account.email} required/>
-            <Input name="password" type="password" placeholder="Password" defaultValue={account.password} required/>
-            <input type="hidden" name="id" defaultValue={account.id}/>
+            <Input name="name" type="text" placeholder="Account Name" defaultValue={application.name} required/>
+            <Input name="username" type="text" placeholder="Username..." defaultValue={application.username} required/>
+            <div className="flex gap-2">
+              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Password" defaultValue={application.password} required/>
+              <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
+            </div>
+            <input type="hidden" name="id" defaultValue={application.id}/>
           </div>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
@@ -85,4 +88,4 @@ const EditAccount = ({account}) => {
   );
 }
 
-export default EditAccount
+export default EditApp

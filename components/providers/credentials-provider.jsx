@@ -26,13 +26,13 @@ const CredentialsContextProvider = ({ children }) => {
   const createCredential = useMutation({
     mutationFn: async (formData) => {
       console.log("Creating credentials", formData,"with",session.token);
-    const { name, email, password } =  {name:formData.get("name"),email:formData.get("email"),password:formData.get("password")};
+    const { name, username, password } =  {name:formData.get("name"),username:formData.get("username"),password:formData.get("password")};
       const res = await fetch("/api/credentials", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
-        body: JSON.stringify({name,email,password}),
+        body: JSON.stringify({name,username,password}),
       });
       if(!res.ok) throw new Error("Failed to create credentials")
       return res.json()
@@ -46,14 +46,14 @@ const CredentialsContextProvider = ({ children }) => {
   const editCredential = useMutation({
     mutationFn: async (formData) => {
       console.log("Editing credentials", formData,"with",session.token);
-      const { name, email, password, id } =  {name:formData.get("name"),email:formData.get("email"),password:formData.get("password"),id:formData.get("id")};
-      console.log({name,email,password,id})
+      const { name, username, password, id } =  {name:formData.get("name"),username:formData.get("username"),password:formData.get("password"),id:formData.get("id")};
+      console.log({name,username,password,id})
       const res = await fetch("/api/credentials", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${session.token}`,
         },
-        body: JSON.stringify({name,email,password,id}),
+        body: JSON.stringify({name,username,password,id}),
       });
       if(!res.ok) throw new Error("Failed to edit credentials")
       return res.json()

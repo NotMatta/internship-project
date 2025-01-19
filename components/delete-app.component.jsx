@@ -14,7 +14,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { useCredentials } from "./providers/credentials-provider";
 import { useToast } from "@/hooks/use-toast";
 
-const DeleteAccount = ({account}) => {
+const DeleteApp = ({application}) => {
 
   const {deleteCredential} = useCredentials()
   const {toast} = useToast()
@@ -24,7 +24,7 @@ const DeleteAccount = ({account}) => {
     const formData = new FormData(e.target);
     await deleteCredential.mutate(formData);
     if(deleteCredential.isError){
-      toast({title:"Failed to delete account",description:"An error occured while deleting the account"})
+      toast({title:"Failed to delete application",description:"An error occured while deleting the application"})
       return
     }
     toast({title:"Account deleted",description:"The account has been deleted"})
@@ -38,16 +38,16 @@ const DeleteAccount = ({account}) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Deleting an account</DialogTitle>
+            <DialogTitle>Deleting an application</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Are you sure you want to delete the account?</DialogDescription>
-          <input type="hidden" name="id" defaultValue={account.id}/>
+          <DialogDescription>Are you sure you want to delete the application?</DialogDescription>
+          <input type="hidden" name="id" defaultValue={application.id}/>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit" variant="destructive">Delete Account</Button>
+              <Button type="submit" variant="destructive">Delete Application</Button>
             </DialogClose>
           </DialogFooter>
         </form>      
@@ -56,4 +56,4 @@ const DeleteAccount = ({account}) => {
   );
 }
 
-export default DeleteAccount
+export default DeleteApp

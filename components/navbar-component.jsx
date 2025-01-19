@@ -33,7 +33,7 @@ const Navbar = () => {
       <nav className="flex flex-col gap-2 p-4">
         <pathContext.Provider value={{path,setPath}}>
           <NavLink href="/main/dashboard"><LayoutDashboard/> Dashboard</NavLink>
-          <NavLink href="/main/accounts"><AppWindow/>Accounts</NavLink>
+          <NavLink href="/main/applications"><AppWindow/>Applications</NavLink>
           <NavLink href="/main/passwords"><KeyRound/>Passwords</NavLink>
           <NavLink href="/main/profile"><User/>Profile</NavLink>
           {session.user.role == "ADMIN" && <NavLink href="/main/admin"><Shield/>Admin Panel</NavLink>}
