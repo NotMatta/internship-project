@@ -25,7 +25,12 @@ A more serious version with more features:
 **Profile**
 - Update Profile
 - Change Password
-- Delete Account
+
+**Admin Panel**:
+- Add Users & Define Roles
+- Display Users
+- Update Users
+- Delete Users
 
 ## Technologies:
 - Next.js

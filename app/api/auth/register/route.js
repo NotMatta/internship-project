@@ -1,5 +1,4 @@
 import { validatePassword, validateUsername, handle } from "@/lib/utils"
-import prisma from "@/prisma/prisma-client"
 import bcrypt from "bcrypt"
 
 export const POST = async (req) => {

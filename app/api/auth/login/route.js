@@ -1,6 +1,7 @@
-import prisma from "@/prisma/prisma-client"
-import bcrypt from "bcrypt"
+import { decryptData } from "@/lib/utils"
 import jwt from "jsonwebtoken"
+
+const secret = process.env.SECRET
 
 export const POST = async (req) => {
   try{
@@ -12,7 +13,7 @@ export const POST = async (req) => {
     if(!FoundUser){
       return Response.json("User not found", {status: 404})
     }
-    const match = await bcrypt.compare(body.password, FoundUser.password)
+    const match = body.password = decryptData(FoundUser.password,secret)
     if(!match){
       return Response.json("Invalid password", {status: 401})
     }

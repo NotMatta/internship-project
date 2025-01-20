@@ -1,5 +1,4 @@
 import { decryptData, encryptData, handle } from "@/lib/utils"
-import prisma from "@/prisma/prisma-client"
 
 const secret = process.env.SECRET
 
@@ -23,7 +22,7 @@ export const POST = async (req) => {
       }
       console.log(tokenRes.body.user.id)
       const encyptedPassword = encryptData(password,secret)
-      const newCredential = await prisma.application.create({
+      const newApplication = await prisma.application.create({
         data: {
           name,
           logo,
@@ -34,7 +33,7 @@ export const POST = async (req) => {
           userId: tokenRes.body.user.id
         }
       })
-      return Response.json({...newCredential,password}, {status: 201})
+      return Response.json({...newApplication,password}, {status: 201})
     })
 }
 
@@ -46,7 +45,7 @@ export const PUT = async (req) => {
       return Response.json("Bad Request", {status: 400})
     }
     const encyptedPassword = encryptData(password,secret)
-    const updatedCredential = await prisma.application.update({
+    const updatedApplication = await prisma.application.update({
       where: {id, userId: tokenRes.body.user.id},
       data: {
         name,
@@ -58,7 +57,7 @@ export const PUT = async (req) => {
         updatedAt: new Date()
       }
     })
-    return Response.json({...updatedCredential,password}, {status: 202})
+    return Response.json({...updatedApplication,password}, {status: 202})
   })
 }
 
@@ -69,9 +68,9 @@ export const DELETE = async (req) => {
     if(!id){
       return Response.json("id is required", {status: 400})
     }
-    const deletedCredential = await prisma.application.delete({
+    const deletedApplication = await prisma.application.delete({
       where: {id, userId: tokenRes.body.user.id}
     })
-    return Response.json(deletedCredential, {status: 200})
+    return Response.json(deletedApplication, {status: 200})
   })
 }

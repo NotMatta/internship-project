@@ -34,10 +34,6 @@ const EditApp = ({application}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    if(!formData.get("name") || !formData.get("login") || !formData.get("password")){
-      setResponse("invalid");
-      return
-    }
     if(application.name == formData.get("name") && application.login == formData.get("login") && application.password == formData.get("password") && application.logo == formData.get("logo") && application.address == formData.get("address") && application.type == formData.get("type")){
       toast({title:"Invalid",description:"No changes made to the application"})
       setResponse("invalid");

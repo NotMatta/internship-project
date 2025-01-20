@@ -46,44 +46,6 @@ const SessionProvider = ({ children }) => {
     setSession({user:null,token:null,status:"unauthenticated"})
   }
 
-  const signUp = async (credentials) => {
-    const {name,email,password,cpassword} = {name:credentials.get("name"),email:credentials.get("email"),password:credentials.get("password"),cpassword:credentials.get("cpassword")};
-    console.log("Signing in",credentials);
-    if(validateUsername(name) !== "Username is valid."){
-      toast({title:"Invalid credentials",description:validateUsername(name)})
-      return
-    }
-    if(password !== cpassword){
-      toast({title:"Invalid credentials",description:"Passwords do not match"})     
-      return
-    }
-    if(validatePassword(password) !== "Password is valid."){
-      toast({title:"Invalid credentials",description:validatePassword(password)})
-      return
-    }
-    console.log("verified credentials");
-    const res = await fetch("/api/auth/register", {
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
-      method: "POST",
-      body: JSON.stringify({name,email,password}),
-    })
-    console.log("sent request")
-    
-    if(res.ok) {
-      alert("Account created successfully")
-      const {user,message} = await res.json()
-      console.log({user,message})
-      return true
-    }
-    alert("Couldn't create an account")
-    const message = await res.json()
-    toast({title:"Couldn't create an account",description:message})
-    return false
-    
-  }
-
   const logIn = async (credentials) => {
     const {email,password} = {email:credentials.get("email"),password:credentials.get("password")};
     if(validatePassword(password) !== "Password is valid."){
@@ -102,11 +64,11 @@ const SessionProvider = ({ children }) => {
       return
     }
     const message = await res.json()
-    toast({title:"Couldn't create an account",description:message})
+    toast({title:"Couldn't Log in",description:message})
   }
 
   return (
-    <SessionContext.Provider value={{session, signOut, signUp, logIn}}>
+    <SessionContext.Provider value={{session, signOut, logIn}}>
       {children}
     </SessionContext.Provider>
   );

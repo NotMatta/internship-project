@@ -1,5 +1,5 @@
 "use client"
-import { AppWindow, KeyRound, LayoutDashboard, Lock, Shield, User } from "lucide-react"
+import { AppWindow, FileClock, KeyRound, LayoutDashboard, Lock, Shield, Tag, User, UserRound } from "lucide-react"
 import { useEffect, useState, useContext, createContext } from "react"
 import Link from "next/link"
 import { useSession } from "./providers/session-provider"
@@ -36,7 +36,12 @@ const Navbar = () => {
           <NavLink href="/main/applications"><AppWindow/>Applications</NavLink>
           <NavLink href="/main/passwords"><KeyRound/>Passwords</NavLink>
           <NavLink href="/main/profile"><User/>Profile</NavLink>
-          {session.user.role == "ADMIN" && <NavLink href="/main/admin"><Shield/>Admin Panel</NavLink>}
+          {session.user.role == "ADMIN" && <p className="flex gap-2 px-2 py-3"><Shield/>Admin Panel</p>}
+          {session.user.role == "ADMIN" && <div className="ml-8 space-y-2">
+            <NavLink href="/main/admin/users"><UserRound />Users</NavLink>
+            <NavLink href="/main/admin/roles"><Tag />Roles</NavLink>
+            <NavLink href="/main/admin/logs"><FileClock />Logs</NavLink>
+          </div>}
         </pathContext.Provider>
       </nav>
     </div>

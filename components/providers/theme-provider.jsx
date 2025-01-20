@@ -43,7 +43,7 @@ export function ModeToggle() {
 export const ThemeProvider = ({children,...props}) => {
   return (
     <NextThemesProvider {...props}>
-      <div className="absolute bottom-2 right-2">
+      <div className="absolute bottom-2 right-2 z-10">
         <ModeToggle />
       </div>
       {children}
