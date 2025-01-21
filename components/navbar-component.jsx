@@ -18,7 +18,7 @@ const NavLink = ({children,href}) => {
     setActive(false)
   }, [href,path])
   return(
-    <Link onClick={() => setPath(href.split("/").pop())} href={href} className={`text-accent-foreground flex gap-2 px-2 py-3 rounded-xl ${active ? "text-background bg-foreground" : "hover:bg-accent"}`}>{children}</Link>
+    <Link onClick={() => setPath(href.split("/").pop())} href={href} className={`text-accent-foreground flex gap-2 px-2 py-3 rounded-xl ${active ? "text-background bg-primary" : "hover:bg-accent hover:text-primary"}`}>{children}</Link>
   )
 }
 
@@ -30,7 +30,7 @@ const Navbar = () => {
   }, [])
   return(
     <div className="min-w-[300px] border-r h-full">
-      <h2 className="flex text-xl p-4 gap-2 font-extrabold items-center"><Logo/> OTC Password Manager</h2>
+      <h2 className="flex text-2xl p-4 gap-2 font-extrabold items-center text-primary"><Logo/> OTC Password Manager</h2>
       <nav className="flex flex-col gap-2 p-4">
         <pathContext.Provider value={{path,setPath}}>
           <NavLink href="/main/dashboard"><LayoutDashboard/> Dashboard</NavLink>

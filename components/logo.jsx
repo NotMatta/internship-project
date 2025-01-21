@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 const Logo = ({width,height}) => {
   const { theme } = useTheme();
   return (
-    <MyLogo width={width || 40} height={height || 40} fill={theme == "dark" ? "white" : "black"}/> 
+    <MyLogo width={width || 50} height={height || 50} fill={theme == "dark" ? "#22c55e" : "#16a34a"}/> 
   );
 }
 

@@ -21,7 +21,7 @@ const AppsPage = () => {
       </div>
       <div className="w-full overflow-y-scroll grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
         {applications && applications.map((application) => (
-          <div key={application.id} className="p-4 border rounded-xl flex flex-col justify-between aspect-square">
+          <div key={application.id} className="p-4 border rounded-xl flex flex-col justify-between w-[300px] h-[250px]">
             <h2 className="line-clamp-1 text-2xl flex gap-2 items-center"><img src={application.logo} className="h-12 w-12"/>{application.name}</h2>
             <div className="flex-grow text-sm">
               <h4>{application.address}<br/>{application.login}</h4>
