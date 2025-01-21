@@ -14,7 +14,7 @@ export const POST = async (req) => {
     if(!FoundUser){
       return Response.json("User not found", {status: 404})
     }
-    const match = body.password = decryptData(FoundUser.password,secret)
+    const match = (body.password == decryptData(FoundUser.password,secret))
     if(!match){
       return Response.json("Invalid password", {status: 401})
     }
