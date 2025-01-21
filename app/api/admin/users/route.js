@@ -54,3 +54,17 @@ export const PUT = async (req) => {
     return Response.json({...updatedUser,password}, {status: 200})
   })
 }
+
+export const DELETE = async (req) => {
+  return await handleAdmin(req, async () => {
+    const { id } = await req.json()
+    if(!id){
+      return Response.json("Bad Request", {status: 400})
+    }
+    const deletedUser = await prisma.user.delete({
+      where: { id: id },
+    })
+    return Response.json(deletedUser, {status: 200})
+  })
+}
+

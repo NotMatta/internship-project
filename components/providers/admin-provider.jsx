@@ -115,6 +115,30 @@ export const AdminProvider = ({children}) => {
     }
   })
 
+  const deleteUser = useMutation({
+    mutationFn: async (formData) => {
+      console.log("Deleting a User", formData,"with",session.token);
+      const { id } = {id:formData.get("id")};
+      const res = await fetch("/api/admin/users/", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+        },
+        body: JSON.stringify({id}),
+      });
+      if(!res.ok) {
+        setMutationStatus("ud_error")
+        throw new Error("Failed to delete user")
+      }
+      setMutationStatus("ud_success")
+      return res.json()
+    },
+    onSuccess: (newData) => {
+      console.log("User Deleted",newData)
+      queryClient.setQueryData(['users'],(oldData) => oldData.filter((user) => user.id !== newData.id))
+    }
+  })
+
   if (!verified || !users || !roles) {
     return (
       <div>
@@ -124,7 +148,7 @@ export const AdminProvider = ({children}) => {
   }
 
   return (
-    <AdminContext.Provider value={{users,roles,createUser,editUser,mutationStatus,setMutationStatus}}>{children}</AdminContext.Provider>
+    <AdminContext.Provider value={{users,roles,createUser,editUser,deleteUser,mutationStatus,setMutationStatus}}>{children}</AdminContext.Provider>
   )
 }
 

@@ -1,5 +1,6 @@
 import { decryptData } from "@/lib/utils"
 import jwt from "jsonwebtoken"
+import prisma from "@/prisma/prisma-client"
 
 const secret = process.env.SECRET
 

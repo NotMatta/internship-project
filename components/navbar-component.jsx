@@ -3,6 +3,8 @@ import { AppWindow, FileClock, KeyRound, LayoutDashboard, Lock, Shield, Tag, Use
 import { useEffect, useState, useContext, createContext } from "react"
 import Link from "next/link"
 import { useSession } from "./providers/session-provider"
+import Logo from "@/public/logo.svg"
+import { useTheme } from "next-themes"
 
 const pathContext = createContext("")
 
@@ -22,6 +24,7 @@ const NavLink = ({children,href}) => {
 }
 
 const Navbar = () => {
+  const { theme } = useTheme()
   const [path, setPath] = useState("")
   const {session} = useSession()
   useEffect(() => {
@@ -29,7 +32,7 @@ const Navbar = () => {
   }, [])
   return(
     <div className="min-w-[300px] border-r h-full">
-      <h2 className="flex text-xl p-4 gap-2 font-extrabold"><Lock/> OTC Password Manager</h2>
+      <h2 className="flex text-xl p-4 gap-2 font-extrabold items-center"><Logo width={40} height={40} fill={theme == "dark" ? "white" : "black"}/> OTC Password Manager</h2>
       <nav className="flex flex-col gap-2 p-4">
         <pathContext.Provider value={{path,setPath}}>
           <NavLink href="/main/dashboard"><LayoutDashboard/> Dashboard</NavLink>

@@ -7,11 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button";
 import { Eye, EyeOff, SquarePen } from "lucide-react";
 import { Input } from "../ui/input";
-import { DialogClose } from "@radix-ui/react-dialog";
 import { useAdmin } from "../providers/admin-provider";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";

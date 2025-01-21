@@ -1,6 +1,7 @@
 "use client"
 import AddUser from "@/components/admin-components/add-user"
 import EditUser from "@/components/admin-components/edit-user"
+import DeleteUser from "@/components/admin-components/delete-user"
 import { useAdmin } from "@/components/providers/admin-provider"
 import { useEffect } from "react"
 
@@ -23,7 +24,10 @@ const UsersPage = () => {
             <h4>{user.name}</h4>
             <p>{user.email}</p>
           </div>
-          <EditUser user={user}/>
+          <div className="space-x-2">
+            <EditUser user={user}/>
+            <DeleteUser user={user}/>
+          </div>
         </div>
       ))}
     </div>

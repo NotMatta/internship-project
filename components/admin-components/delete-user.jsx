@@ -7,34 +7,34 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog"
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
-import { useApplications } from "./providers/applications-provider";
+import { useAdmin } from "../providers/admin-provider";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
 
-const DeleteApp = ({application}) => {
+const DeleteUser = ({user}) => {
 
-  const {deleteApplication,mutationStatus,setMutationStatus} = useApplications()
+  const {deleteUser,mutationStatus,setMutationStatus} = useAdmin()
   const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMutationStatus("loading")
     const formData = new FormData(e.target);
-    await deleteApplication.mutate(formData);
+    await deleteUser.mutate(formData);
   }
 
   useEffect(() => {
-    if(mutationStatus == "d_success"){
+    if(mutationStatus == "ud_success"){
       setMutationStatus("none")
-      toast({title:"Application deleted",description:"The application has been deleted"})
+      toast({title:"User deleted",description:"The user has been deleted"})
     }
-    if(mutationStatus == "d_error"){
+    if(mutationStatus == "ud_error"){
       setMutationStatus("none")
-      toast({title:"Failed to delete application",description:"An error occured while deleting the application"})
+      toast({title:"Failed to delete user",description:"An error occured while deleting the user"})
     }
   },[mutationStatus,setMutationStatus,toast])
 
@@ -46,16 +46,16 @@ const DeleteApp = ({application}) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Deleting an application</DialogTitle>
+            <DialogTitle>Deleting an user</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Are you sure you want to delete the application?</DialogDescription>
-          <input type="hidden" name="id" defaultValue={application.id}/>
+          <DialogDescription>Are you sure you want to delete the user?</DialogDescription>
+          <input type="hidden" name="id" defaultValue={user.id}/>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Delete Application</Button>
+              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Delete User</Button>
             </DialogClose>
           </DialogFooter>
         </form>      
@@ -64,4 +64,4 @@ const DeleteApp = ({application}) => {
   );
 }
 
-export default DeleteApp
+export default DeleteUser
