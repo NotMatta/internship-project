@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import prisma from "@/prisma/prisma-client"
 
 export const GET = async (req) => {
   console.log("validation called")

@@ -1,4 +1,5 @@
 import { decryptData, encryptData, handle } from "@/lib/utils"
+import prisma from "@/prisma/prisma-client"
 
 const secret = process.env.SECRET
 

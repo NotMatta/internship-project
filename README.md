@@ -50,4 +50,4 @@ A more serious version with more features:
 - [X] Create the accounts
 - [X] Create the passwords
 - [ ] Create the profile
-- [ ] Deploy the project
+- [X] Deploy the project

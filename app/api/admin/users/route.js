@@ -1,5 +1,6 @@
 import { handleAdmin } from "@/lib/utils"
 import { encryptData, decryptData } from "@/lib/utils"
+import prisma from "@/prisma/prisma-client"
 
 const secret = process.env.SECRET
 
