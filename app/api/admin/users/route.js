@@ -62,6 +62,9 @@ export const DELETE = async (req) => {
     if(!id){
       return Response.json("Bad Request", {status: 400})
     }
+    await prisma.application.deleteMany({
+      where: { userId: id },
+    })
     const deletedUser = await prisma.user.delete({
       where: { id: id },
     })

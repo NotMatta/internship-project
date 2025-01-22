@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body>
         <Toaster/>
         <QueryProvider>
-          <ThemeProvider defaultTheme="dark" attribute="class" enableSystem>
+          <ThemeProvider defaultTheme="light" attribute="class" enableSystem>
             <SessionProvider>
               <ApplicationsProvider>
                 {children}

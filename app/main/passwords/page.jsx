@@ -10,10 +10,10 @@ const PasswordRow = ({application,passwords}) => {
   const passwordStrength = strength(application.password,passwordAge,passwords);
   const passwordScore = score(application.password);
   return (
-    <tr className="[&>td]:p-2 border">
+    <tr className="[&>td]:p-2 border bg-secondary">
       <td>
         <div className="flex items-center gap-2">
-          <img src={application.logo} className="h-10 w-10 rounded-full"/>
+          <img src={application.logo} className="h-10 w-10 object-cover rounded"/>
           <>{application.name}<br/>{application.address}</>
         </div>
       </td>

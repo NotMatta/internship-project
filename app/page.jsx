@@ -13,14 +13,15 @@ const HomePage = () => {
       <img src="https://i.redditmedia.com/AUXwGcVgSh0v6POuTDYvWH1kEzBQvK1EWb777KbSp4w.jpg?s=7417d7fcca26778f6d2b0f43196cc18e"
         className='absolute w-full h-full object-cover -z-20'/>
       <div className='absolute w-full h-full bg-black opacity-40 -z-10'/>
-      <div className='flex items-center justify-center gap-4'>
-        <Logo width={100} height={100}/>
+      <div className='flex items-center justify-center gap-4 text-white'>
+        <Logo width={100} height={100} color="white"/>
         <h1>OTC Password Manager</h1>
       </div>
       <div className='flex items-center gap-2'>
         <Link href="https://github.com/NotMatta/password-manager" target="_blank"><Button className="bg-background text-foreground hover:bg-accent">Source <Github/></Button></Link>
         <Link href={session.status == "loading" ? "#" : session.status == "authenticated"? "/main/dashboard" : "/auth/login"}><Button>Start <MoveRight/></Button></Link>
       </div>
+      <p className='text-white'>(Experimental ☕)</p>
     </div>
   );
 }

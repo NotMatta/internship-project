@@ -30,7 +30,7 @@ const Navbar = () => {
   }, [])
   return(
     <div className="min-w-[300px] border-r h-full">
-      <h2 className="flex text-2xl p-4 gap-2 font-extrabold items-center text-primary"><Logo/> OTC Password Manager</h2>
+      <Link href="/"><h2 className="flex text-2xl p-4 gap-2 font-extrabold items-center text-primary"><Logo/> OTC Password Manager</h2></Link>
       <nav className="flex flex-col gap-2 p-4">
         <pathContext.Provider value={{path,setPath}}>
           <NavLink href="/main/dashboard"><LayoutDashboard/> Dashboard</NavLink>

@@ -13,23 +13,25 @@ const UsersPage = () => {
 
   if(!users) return <div>Loading...</div>
   return(
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-9">
       <div className="flex justify-between items-center">
         <h1>Manage Users</h1>
         <AddUser/>
       </div>
-      {users.map((user) => (
-        <div key={user.id} className="border p-4 flex justify-between">
-          <div>
-            <h4>{user.name}</h4>
-            <p>{user.email}</p>
+      <div className="flex flex-col gap-2">
+        {users.map((user) => (
+          <div key={user.id} className="border p-4 flex justify-between bg-secondary rounded-2xl">
+            <div>
+              <h4>{user.name}</h4>
+              <p>{user.email}</p>
+            </div>
+            <div className="space-x-2">
+              <EditUser user={user}/>
+              <DeleteUser user={user}/>
+            </div>
           </div>
-          <div className="space-x-2">
-            <EditUser user={user}/>
-            <DeleteUser user={user}/>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }
