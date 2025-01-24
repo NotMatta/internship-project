@@ -2,6 +2,7 @@
 import { usePath } from "@/components/providers/path-provider";
 import { useEffect } from "react";
 import { useSession } from "@/components/providers/session-provider";
+import { redirect } from "next/navigation";
 
 const ProfilePage = () => {
   const {session, signOut } = useSession();

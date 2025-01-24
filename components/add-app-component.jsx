@@ -57,7 +57,7 @@ const AddApp = () => {
     }
   },[mutationStatus,setMutationStatus,toast])
 
-  if(!permissions.includes("WRITE_APPLICATIONS") && !permissions.includes("MASTER")) return null
+  if(!permissions.includes("WRITE_APPS") && !permissions.includes("MASTER")) return null
 
   return (
     <Dialog>

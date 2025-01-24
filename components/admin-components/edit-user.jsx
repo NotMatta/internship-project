@@ -99,7 +99,7 @@ const EditUser = ({user}) => {
         </form>:
           <div>
           <DialogHeader>
-            <DialogTitle>Successfully edited a new user!</DialogTitle>
+            <DialogTitle>Successfully edited a user!</DialogTitle>
           </DialogHeader>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
