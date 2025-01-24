@@ -35,7 +35,11 @@ const Navbar = () => {
 
   return(
     <div className="min-w-[300px] border-r h-full">
-      <Link href="/" onClick={() => setPath("")}><h2 className="flex text-2xl p-4 gap-2 font-extrabold items-center text-primary"><Logo/> OTC Password Manager</h2></Link>
+      <Link href="/" onClick={() => setPath("")}>
+        <h2 className="flex text-2xl p-4 gap-2 font-extrabold items-center text-primary w-full justify-center">
+          <Logo/> Password Manager
+        </h2>
+      </Link>
       <nav className="flex flex-col gap-2 p-4">
         <NavLink href="/main/dashboard" permission="READ_APPS"><LayoutDashboard/> Dashboard</NavLink>
         <NavLink href="/main/applications" permission="READ_APPS"><AppWindow/>Applications</NavLink>
