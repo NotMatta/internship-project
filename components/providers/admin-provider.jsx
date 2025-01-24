@@ -4,6 +4,7 @@ import { useSession } from "./session-provider"
 import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
+import { redirect } from "next/navigation"
 
 const AdminContext = createContext()
 
@@ -14,6 +15,12 @@ export const AdminProvider = ({children}) => {
   const [mutationStatus,setMutationStatus] = useState("none")
   const { session } = useSession()
   const { toast } = useToast()
+
+  if(!permissions.includes("READ_USERS") && !permissions.includes("MASTER") && !permissions.includes("READ_ROLES") && !permissions.includes("READ_LOGS")){
+    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
+    redirect("/profile")
+  }      
+
   const users = useQuery({queryKey:['users'],queryFn: async () => {
     const res = await fetch("/api/admin/users", {
       headers: {
@@ -206,13 +213,12 @@ export const AdminProvider = ({children}) => {
   })
 
   if ( !users && !roles) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    )
-  }
-
+      return (
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      )
+    }
   return (
     <AdminContext.Provider value={{users,roles,createUser,editUser,deleteUser,createRole,editRole,deleteRole,mutationStatus,setMutationStatus}}>{children}</AdminContext.Provider>
   )
