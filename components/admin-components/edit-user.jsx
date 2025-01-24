@@ -14,7 +14,6 @@ import { Eye, EyeOff, SquarePen } from "lucide-react";
 import { Input } from "../ui/input";
 import { useAdmin } from "../providers/admin-provider";
 import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -31,7 +30,6 @@ const EditUser = ({user}) => {
   const {editUser,roles,mutationStatus,setMutationStatus} = useAdmin()
   const [displayPassword,setDisplayPassword] = useState(false);
   const [res, setResponse] = useState("none");
-  const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,13 +52,12 @@ const EditUser = ({user}) => {
     if(mutationStatus == "ue_error"){
       setResponse("error")
       setMutationStatus("none")
-      toast({title:"Failed to edit user",description:"An error occured while editing the user"})
     }
     if(mutationStatus == "ue_invalid"){
       setResponse("invalid")
       setMutationStatus("none")
     }
-  },[mutationStatus,setMutationStatus,toast])
+  },[mutationStatus,setMutationStatus])
 
   if((!permissions.includes("WRITE_USERS") || !permissions.includes("READ_ROLES") || !roles)  && !permissions.includes("MASTER")) return null
 
@@ -95,7 +92,7 @@ const EditUser = ({user}) => {
           </div>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" type="reset">Cancel</Button>
             </DialogClose>
             <Button type="submit" disabled={mutationStatus == "loading"}>Edit User</Button>
           </DialogFooter>

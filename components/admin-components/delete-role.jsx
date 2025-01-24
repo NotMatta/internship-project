@@ -16,30 +16,29 @@ import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
 import { useSession } from "../providers/session-provider";
 
-const DeleteUser = ({user}) => {
-
+const DeleteRole = ({role}) => {
   const permissions = useSession().session.user.permissions || [];
-  const {deleteUser,mutationStatus,setMutationStatus} = useAdmin()
+  const {deleteRole,mutationStatus,setMutationStatus} = useAdmin()
   const {toast} = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMutationStatus("loading")
     const formData = new FormData(e.target);
-    await deleteUser.mutate(formData);
+    await deleteRole.mutate(formData);
   }
 
   useEffect(() => {
-    if(mutationStatus == "ud_success"){
+    if(mutationStatus == "rd_success"){
       setMutationStatus("none")
-      toast({title:"User deleted",description:"The user has been deleted"})
+      toast({title:"Role deleted",description:"The role has been deleted"})
     }
-    if(mutationStatus == "ud_error"){
+    if(mutationStatus == "rd_error"){
       setMutationStatus("none")
     }
   },[mutationStatus,setMutationStatus,toast])
 
-  if(!permissions.includes("WRITE_USERS") && !permissions.includes("MASTER")) return null
+  if(!permissions.includes("WRITE_ROLES") && !permissions.includes("MASTER")) return null
 
   return (
     <Dialog>
@@ -49,22 +48,22 @@ const DeleteUser = ({user}) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Deleting an user</DialogTitle>
+            <DialogTitle>Deleting a role</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Are you sure you want to delete the user?</DialogDescription>
-          <input type="hidden" name="id" defaultValue={user.id}/>
+          <DialogDescription>Are you sure you want to delete the role?</DialogDescription>
+          <input type="hidden" name="id" defaultValue={role.id}/>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" type="reset">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Delete User</Button>
+              <Button variant="destructive" type="submit">Delete</Button>
             </DialogClose>
           </DialogFooter>
-        </form>      
+        </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 
-export default DeleteUser
+export default DeleteRole

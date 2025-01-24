@@ -31,10 +31,11 @@ const UsersPage = () => {
       </div>
       <div className="flex flex-col gap-2">
         {users.map((user) => (
-          <div key={user.id} className="border p-4 flex justify-between bg-secondary rounded-2xl">
+          <div key={user.id} className="border p-4 flex justify-between rounded-2xl">
             <div>
               <h4>{user.name}</h4>
               <p>{user.email}</p>
+              <p>Role: {user.role.name}</p>
             </div>
             <div className="space-x-2">
               <EditUser user={user}/>
