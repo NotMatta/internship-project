@@ -1,11 +1,12 @@
 import { handleAdmin } from "@/lib/utils"
+import { handle } from "@/lib/utils"
 import { encryptData, decryptData } from "@/lib/utils"
 import prisma from "@/prisma/prisma-client"
 
 const secret = process.env.SECRET
 
 export const GET = async (req) => {
-  return await handleAdmin(req, async () => {
+  return await handle(req,["READ_USERS"],async () => {
     const users = await prisma.user.findMany()
     users.forEach((user) => {
       user.password = decryptData(user.password,secret)

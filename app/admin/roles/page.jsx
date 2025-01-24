@@ -1,8 +1,17 @@
 "use client"
 import { useAdmin } from "@/components/providers/admin-provider"
 import { useEffect } from "react"
+import { useSession } from "@/components/providers/session-provider"
+import { redirect } from "next/navigation"
+import { useToast } from "@/hooks/use-toast"
 
 const RolesPage = () => {
+  const {session} = useSession()
+  const {toast} = useToast()
+  if(!session.user.permissions.includes("READ_ROLES") && !session.user.permissions.includes("MASTER")){
+    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
+    redirect("/profile")
+  }
   const roles = useAdmin().roles
   useEffect(() => {
     console.log("Roles loaded", roles)

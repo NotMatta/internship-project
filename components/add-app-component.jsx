@@ -22,10 +22,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useSession } from "./providers/session-provider";
+
+const defaultLogo = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxheW91dC1ncmlkIj48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSI3IiB4PSIzIiB5PSIzIiByeD0iMSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjciIHg9IjE0IiB5PSIzIiByeD0iMSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjciIHg9IjE0IiB5PSIxNCIgcng9IjEiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSI3IiB4PSIzIiB5PSIxNCIgcng9IjEiLz48L3N2Zz4="
 
 
 const AddApp = () => {
 
+  const permissions = useSession().session.user.permissions || [];
   const {createApplication,mutationStatus,setMutationStatus} = useApplications()
   const [displayPassword,setDisplayPassword] = useState(false);
   const [res, setResponse] = useState("none");
@@ -36,7 +40,7 @@ const AddApp = () => {
     e.preventDefault();
     setMutationStatus("loading")
     const formData = new FormData(e.target);
-    if (!logo) formData.set("logo","https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png")
+    if (!logo) formData.set("logo",defaultLogo)
     console.log(formData)
     createApplication.mutate(formData)
   }
@@ -53,6 +57,8 @@ const AddApp = () => {
     }
   },[mutationStatus,setMutationStatus,toast])
 
+  if(!permissions.includes("WRITE_APPLICATIONS") && !permissions.includes("MASTER")) return null
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -68,7 +74,7 @@ const AddApp = () => {
           <div className="space-y-2">
             <div className="flex gap-2 items-center">
               <Input name="logo" type="text" placeholder="Logo url ~ " value={logo} onChange={e => setLogo(e.target.value)}/>
-              <img src={logo ? logo : "https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png"} alt="logo" className="w-12 h-12"/>
+              <img src={logo ? logo : defaultLogo} alt="logo" className="w-12 h-12"/>
             </div>
             <Input name="name" type="text" placeholder="Application Name" required/>
             <Input name="login" type="text" placeholder="Username / Email / Phone.." required/>

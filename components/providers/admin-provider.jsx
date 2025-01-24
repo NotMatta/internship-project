@@ -11,7 +11,8 @@ const AdminContext = createContext()
 export const AdminProvider = ({children}) => {
 
   const queryClient = useQueryClient()
-  const [verified, setVerified] = useState(false)
+  const [canViewUsers, setViewUsers] = useState(true)
+  const [canViewRoles, setViewRoles] = useState(true)
   const [mutationStatus,setMutationStatus] = useState("none")
   const { session } = useSession()
   const router = useRouter()
@@ -23,12 +24,16 @@ export const AdminProvider = ({children}) => {
       }
     })
     if(!res.ok){
+      if(res.status == 403){
+        setViewUsers(false)
+      }
       throw new Error("Failed to fetch users")
     }
     return res.json()
     },
-    enabled: verified
+    enabled: canViewUsers
   }).data
+
   const roles = useQuery({queryKey:['roles'],queryFn: async () => {
     const res = await fetch("/api/admin/roles", {
       headers: {
@@ -36,36 +41,15 @@ export const AdminProvider = ({children}) => {
       }
     })
     if(!res.ok){
+      if(res.status == 403){
+        setViewRoles(false)
+      }
       throw new Error("Failed to fetch roles")
     }
     return res.json()
     },
-    enabled: verified
+    enabled: canViewRoles
   }).data
-
-  useEffect(() => {
-    const validateAdmin = async () => {
-      const res = await fetch("/api/auth/validate", {
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-        },
-      })
-      if (!res.ok) {
-        toast({ title: "Unauthorized", description: "You are not authorized to view this page" })
-        router.push("/main/dashboard")
-        return
-      }
-      const data = await res.json()
-      if (data.user.role.name !== "ADMIN") {
-        toast({ title: "Unauthorized", description: "You are not authorized to view this page" })
-        router.push("/main/dashboard")
-        return
-      }
-      setVerified(true)
-    }
-    if (verified) return
-    validateAdmin()
-  }, [session.token, toast, verified, router])
 
   const createUser = useMutation({
     mutationFn: async (formData) => {
@@ -139,7 +123,7 @@ export const AdminProvider = ({children}) => {
     }
   })
 
-  if (!verified || !users || !roles) {
+  if ( !users && !roles) {
     return (
       <div>
         <h1>Loading...</h1>

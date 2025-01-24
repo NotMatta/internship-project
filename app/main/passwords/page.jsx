@@ -2,10 +2,12 @@
 import EditApp from "@/components/edit-app-component";
 import DeleteApp from "@/components/delete-app.component";
 import { useState, useEffect } from "react";
+import { useSession } from "@/components/providers/session-provider";
 import { useApplications } from "@/components/providers/applications-provider";
 import {calculatePasswordScore as score, calculatePasswordStrength as strength, getAgeInDays as age} from "@/lib/utils";
 
 const PasswordRow = ({application,passwords}) => {
+  const permissions = useSession().session.user.permissions || [];
   const passwordAge = age(application.updatedAt);
   const passwordStrength = strength(application.password,passwordAge,passwords);
   const passwordScore = score(application.password);
@@ -19,7 +21,7 @@ const PasswordRow = ({application,passwords}) => {
       </td>
       <td>
         {passwordScore}%
-        <div className="bg-accent h-3 w-full rounded-xl">
+        <div className="bg-background h-3 w-full rounded-xl">
           <div className={`h-full rounded-xl ${passwordScore <= 20 ? "bg-red-500 w-1/5" : passwordScore <= 40 ? "bg-red-500 w-2/5" : passwordScore <= 60 ? "bg-yellow-500 w-3/5" : passwordScore <= 80 ? "bg-yellow-500 w-4/5" : passwordScore <= 90 ? "bg-green-500 w-11/12" : "w-full"}`}></div>
         </div>
       </td>
@@ -44,7 +46,7 @@ const PasswordsPage = () => {
   }, [applications])
 
   return (
-    <div className="max-h-full overflow-scroll">
+    <div className="max-h-full overflow-y-scroll flex flex-col gap-9">
       <h1>Passwords</h1>
       <table className="w-full border">
         <thead>

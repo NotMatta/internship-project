@@ -2,12 +2,14 @@
 import AddApp from "@/components/add-app-component";
 import EditApp from "@/components/edit-app-component";
 import DeleteApp from "@/components/delete-app.component";
+import { useSession } from "@/components/providers/session-provider";
 import { useApplications } from "@/components/providers/applications-provider";
 import { getAgeInDays as age, formatISODate as date } from "@/lib/utils";
 import { useEffect } from "react";
 
 const AppsPage = () => {
 
+  const permissions = useSession().session.user.permissions || [];
   const applications = useApplications().applications.data;
   useEffect(() => {
     console.log("Applications loaded",applications);

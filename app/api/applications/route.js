@@ -4,17 +4,17 @@ import prisma from "@/prisma/prisma-client"
 const secret = process.env.SECRET
 
 export const GET = async (req) => {
-    return handle(req, async ({tokenRes}) => {
-      const applications = await prisma.application.findMany({where:{userId:tokenRes.body.user.id}})
-      applications.forEach((application) => {
-        application.password = decryptData(application.password,secret)
-      })
-      return Response.json(applications, {status: 200})
+  return handle(req,["READ_APPS"], async ({tokenRes}) => {
+    const applications = await prisma.application.findMany({where:{userId:tokenRes.body.user.id}})
+    applications.forEach((application) => {
+      application.password = decryptData(application.password,secret)
     })
+    return Response.json(applications, {status: 200})
+  })
 }
 
 export const POST = async (req) => {
-    return handle(req, async ({tokenRes}) => {
+    return handle(req,["WRITE_APPS"],async ({tokenRes}) => {
       const body = await req.json()
       const {logo,name,address,type,login,password} = body
       console.log(body)
@@ -39,7 +39,7 @@ export const POST = async (req) => {
 }
 
 export const PUT = async (req) => {
-  return handle(req, async ({tokenRes}) => {
+  return handle(req,["WRITE_APPS"],async ({tokenRes}) => {
     const body = await req.json()
     const {logo,name,address,type,login,password,id} = body
     if(!logo || !name || !address || !type || !login || !password || !id){
@@ -63,7 +63,7 @@ export const PUT = async (req) => {
 }
 
 export const DELETE = async (req) => {
-  return handle(req, async ({tokenRes}) => {
+  return handle(req,["WRITE_APPS"],async ({tokenRes}) => {
     const body = await req.json()
     const {id} = {id:body.id}
     if(!id){

@@ -22,9 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useSession } from "./providers/session-provider";
 
 const EditApp = ({application}) => {
 
+  const permissions = useSession().session.user.permissions || [];
   const {editApplication,mutationStatus,setMutationStatus} = useApplications()
   const [displayPassword,setDisplayPassword] = useState(false);
   const [logo, setLogo] = useState(application.logo);
@@ -54,6 +56,9 @@ const EditApp = ({application}) => {
       toast({title:"Failed to edit application",description:"An error occured while editing the application"})
     }
   },[mutationStatus,setMutationStatus,toast])
+
+
+  if(!permissions.includes("WRITE_APPS") && !permissions.includes("MASTER")) return null
 
   return (
     <Dialog>

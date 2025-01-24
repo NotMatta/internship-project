@@ -14,9 +14,11 @@ import { Trash } from "lucide-react";
 import { useAdmin } from "../providers/admin-provider";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { useSession } from "../providers/session-provider";
 
 const DeleteUser = ({user}) => {
 
+  const permissions = useSession().session.user.permissions || [];
   const {deleteUser,mutationStatus,setMutationStatus} = useAdmin()
   const {toast} = useToast()
 
@@ -37,6 +39,8 @@ const DeleteUser = ({user}) => {
       toast({title:"Failed to delete user",description:"An error occured while deleting the user"})
     }
   },[mutationStatus,setMutationStatus,toast])
+
+  if(!permissions.includes("WRITE_USERS") && !permissions.includes("MASTER")) return null
 
   return (
     <Dialog>

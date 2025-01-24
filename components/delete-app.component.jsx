@@ -14,9 +14,11 @@ import { Trash } from "lucide-react";
 import { useApplications } from "./providers/applications-provider";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { useSession  } from "./providers/session-provider";
 
 const DeleteApp = ({application}) => {
 
+  const permissions = useSession().session.user.permissions || [];
   const {deleteApplication,mutationStatus,setMutationStatus} = useApplications()
   const {toast} = useToast()
 
@@ -37,6 +39,8 @@ const DeleteApp = ({application}) => {
       toast({title:"Failed to delete application",description:"An error occured while deleting the application"})
     }
   },[mutationStatus,setMutationStatus,toast])
+
+  if(!permissions.includes("WRITE_APPLICATIONS") && !permissions.includes("MASTER")) return null
 
   return (
     <Dialog>

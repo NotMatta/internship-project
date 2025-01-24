@@ -22,10 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useSession } from "../providers/session-provider";
 
 
 const AddUser = () => {
 
+  const permissions = useSession().session.user.permissions || []
   const {createUser,roles,mutationStatus,setMutationStatus} = useAdmin()
   const [displayPassword,setDisplayPassword] = useState(false);
   const [res, setResponse] = useState("none");
@@ -54,6 +56,8 @@ const AddUser = () => {
       setMutationStatus("none")
     }
   },[mutationStatus,setMutationStatus,toast])
+
+  if((!permissions.includes("WRITE_USERS") || !permissions.includes("READ_ROLES") || !roles)  && !permissions.includes("MASTER")) return null
 
   return (
     <Dialog>

@@ -2,10 +2,21 @@
 import AddUser from "@/components/admin-components/add-user"
 import EditUser from "@/components/admin-components/edit-user"
 import DeleteUser from "@/components/admin-components/delete-user"
+import { useToast } from "@/hooks/use-toast"
+import { useSession } from "@/components/providers/session-provider"
 import { useAdmin } from "@/components/providers/admin-provider"
+import { redirect } from "next/navigation"
 import { useEffect } from "react"
 
 const UsersPage = () => {
+
+  const {toast} = useToast()
+  const {session} = useSession()
+  if(!session.user.permissions.includes("READ_USERS") && !session.user.permissions.includes("MASTER")){
+    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
+    redirect("/profile")
+  }
+
   const users = useAdmin().users
   useEffect(() => {
     console.log("Users loaded", users)

@@ -8,8 +8,6 @@ const applicationsContext = createContext();
 const ApplicationsContextProvider = ({ children }) => {
   const [mutationStatus,setMutationStatus] = useState("none")
   const { session } = useSession();
-  console.log("Applications provider loaded !");
-
   const queryClient = useQueryClient()
 
   const {data,loading,error} = useQuery({queryKey:['applications'],queryFn: async () => {

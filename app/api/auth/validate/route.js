@@ -10,7 +10,9 @@ export const GET = async (req) => {
     }
     try{
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
-      const user = await prisma.user.findUnique({where: {id: decoded.id}, include:{role:true}})
+      const FoundUser = await prisma.user.findUnique({where: {id: decoded.id}, include:{role:true}})
+      const {password, ...user} = FoundUser
+      console.log(user)
       if(!user){
         return Response.json("User not found", {status: 404})
       }
@@ -26,5 +28,4 @@ export const GET = async (req) => {
     console.log(err)
     return Response.json("Internal Server Error", {status: 500})
   }
-
 }

@@ -20,15 +20,17 @@ const SessionProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      return res.ok;
+      const {user} = await res.json()
+      return user
     }
 
     const getLocalSession = async () => {
       const localSession = JSON.parse(localStorage.getItem("session"));
       if (localSession) {
-        const isValid = await verifySession(localSession.token)        
-        if (isValid) {
-          setSession({...localSession,status:"authenticated"});
+        const user = await verifySession(localSession.token)        
+        if (user) {
+          setSession({...localSession,user:{...localSession.user,permissions:user.role.permissions},status:"authenticated"});
+          localStorage.setItem("session", JSON.stringify({...localSession,user:{...localSession.user,permissions:user.role.permissions}}))
           return
         } else {
           localStorage.removeItem("session");
@@ -66,6 +68,9 @@ const SessionProvider = ({ children }) => {
     const message = await res.json()
     toast({title:"Couldn't Log in",description:message})
   }
+
+  if(session.status === "loading") return <div>Loading...</div>
+  console.log(session)
 
   return (
     <SessionContext.Provider value={{session, signOut, logIn}}>

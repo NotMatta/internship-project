@@ -20,7 +20,7 @@ export const POST = async (req) => {
     }
     console.log(FoundUser)
     const token = jwt.sign({id: FoundUser.id, roleId: FoundUser.role.id}, process.env.JWT_SECRET)
-    return Response.json({user: {name:FoundUser.name, role:FoundUser.role.name, email:FoundUser.email}, token}, {status: 200})
+    return Response.json({user: {name:FoundUser.name, permissions:FoundUser.role.permissions, email:FoundUser.email}, token}, {status: 200})
   } catch(err){
     console.log(err)
     return Response.json("Internal Server Error", {status: 500})
