@@ -9,9 +9,8 @@ const AdminContext = createContext()
 
 export const AdminProvider = ({children}) => {
 
+  const permissions = useSession().session.user.permissions || []
   const queryClient = useQueryClient()
-  const [canViewUsers, setViewUsers] = useState(true)
-  const [canViewRoles, setViewRoles] = useState(true)
   const [mutationStatus,setMutationStatus] = useState("none")
   const { session } = useSession()
   const { toast } = useToast()
@@ -30,7 +29,7 @@ export const AdminProvider = ({children}) => {
     }
     return res.json()
     },
-    enabled: canViewUsers
+    enabled: permissions.includes("READ_USERS") || permissions.includes("MASTER")
   }).data
 
   const roles = useQuery({queryKey:['roles'],queryFn: async () => {
@@ -47,7 +46,7 @@ export const AdminProvider = ({children}) => {
     }
     return res.json()
     },
-    enabled: canViewRoles
+    enabled: permissions.includes("READ_ROLES") || permissions.includes("MASTER")
   }).data
 
   const createUser = useMutation({
