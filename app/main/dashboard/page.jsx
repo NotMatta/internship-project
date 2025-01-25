@@ -2,18 +2,18 @@
 import { useSession } from "@/components/providers/session-provider"
 import { useApplications } from "@/components/providers/applications-provider"
 import { ShieldCheck } from "lucide-react"
-import { calculateOverAllScore, calculatePasswordScore } from "@/lib/utils"
+import { calculateOverAllScore, calculatePasswordScore, getAgeInDays } from "@/lib/utils"
 
 const DashBoard = () => {
   const {session} = useSession()
   const applications = useApplications().applications.data || [];
   const passwords = applications.map(app => app.password)
-  const outdatedPasswords = applications.filter(app => app.updatedAt > 90)
+  const outdatedPasswords = applications.filter(app => getAgeInDays(app.updatedAt) > 30)
   const weakPasswords = applications.filter(app =>  calculatePasswordScore(app.password) <= 60)
   const repetetivePasswords = applications.filter(app => passwords.filter(p => p == app.password).length > 1)
   const score = calculateOverAllScore(passwords)
   return(
-    <div className="grid grid-cols-3 grid-rows-3 w-full h-full gap-2">
+    <div className="grid grid-cols-3 grid-rows-3 w-full h-full gap-2 [&_div]:bg-secondary">
       <div className="border rounded-xl col-span-3 row-span-2 p-4 flex flex-col h-full">
         <h1>Dashboard</h1>
         <p>Welcom to your dashboard {session.user.name}</p>
