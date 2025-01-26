@@ -63,9 +63,15 @@ model Application {
 enum ActionType {
   LOGIN
   LOGOUT
-  CREATE
-  UPDATE
-  DELETE
+  CREATE_APP
+  UPDATE_APP
+  DELETE_APP
+  CREATE_USER
+  UPDATE_USER
+  DELETE_USER
+  CREATE_ROLE
+  UPDATE_ROLE
+  DELETE_ROLE
 }
 
 model Log {

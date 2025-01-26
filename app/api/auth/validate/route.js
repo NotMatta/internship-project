@@ -22,6 +22,7 @@ export const GET = async (req) => {
       return Response.json({user}, {status: 200})
     }
     catch(err){
+      console.log(err)
       return Response.json("Invalid token", {status: 401})
     }
   } catch(err){
