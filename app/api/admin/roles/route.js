@@ -9,7 +9,7 @@ export const GET = async (req) => {
 }
 
 export const POST = async (req) => {
-  return await handle(req,["WRITE_ROLES"], async () => {
+  return await handle(req,["WRITE_ROLES"], async ({tokenRes}) => {
     const body = await req.json()
     const {name,permissions} = body
     if(!name || !permissions || permissions.includes("MASTER" || name == "MASTER")){
@@ -19,6 +19,13 @@ export const POST = async (req) => {
       data: {
         name,
         permissions
+      }
+    })
+    await prisma.log.create({
+      data: {
+        message: `Created new role: "${name}" by "${tokenRes.body.user.name}"`,
+        action: "CREATE_ROLE",
+        userId: tokenRes.body.user.id
       }
     })
     return Response.json(newRole, {status: 201})
@@ -48,6 +55,13 @@ export const PUT = async (req) => {
       data: {
         name,
         permissions
+      }
+    })
+    await prisma.log.create({
+      data: {
+        message: `Updated role: "${name}" by "${tokenRes.body.user.name}"`,
+        action: "UPDATE_ROLE",
+        userId: tokenRes.body.user.id
       }
     })
     return Response.json(updatedRole, {status: 200})
@@ -83,6 +97,13 @@ export const DELETE = async (req) => {
 
     const deletedRole = await prisma.role.delete({
       where: {id}
+    })
+    await prisma.log.create({
+      data: {
+        message: `Deleted role: "${deletedRole.name}" by "${tokenRes.body.user.name}"`,
+        action: "DELETE_ROLE",
+        userId: tokenRes.body.user.id
+      }
     })
     return Response.json(deletedRole, {status: 200})
   })

@@ -15,7 +15,7 @@ export const GET = async (req) => {
 }
 
 export const POST = async (req) => {
-  return await handle(req,["WRITE_USERS"], async () => {
+  return await handle(req,["WRITE_USERS"], async ({tokenRes}) => {
     const body = await req.json()
     const {name,email,password,roleId} = body
     if(!name || !email || !password || !roleId){
@@ -38,6 +38,13 @@ export const POST = async (req) => {
         password: encyptedPassword,
         roleId
       },include:{role:true}
+    })
+    await prisma.log.create({
+      data: {
+        message: `Created new user: "${name}" by "${tokenRes.body.user.name}"`,
+        action: "CREATE_USER",
+        userId: tokenRes.body.user.id
+      }
     })
     return Response.json({...newUser,password}, {status: 201})
   })
@@ -75,6 +82,13 @@ export const PUT = async (req) => {
         roleId
       },include:{role:true}
     })
+    await prisma.log.create({
+      data: {
+        message: `Updated user: "${name}" by "${tokenRes.body.user.name}"`,
+        action: "UPDATE_USER",
+        userId: tokenRes.body.user.id
+      }
+    })
     return Response.json({...updatedUser,password}, {status: 200})
   })
 }
@@ -97,6 +111,13 @@ export const DELETE = async (req) => {
     })
     const deletedUser = await prisma.user.delete({
       where: {id },
+    })
+    await prisma.log.create({
+      data: {
+        message: `Deleted user: "${deletedUser.name}" by: "${tokenRes.body.user.name}"`,
+        action: "DELETE_USER",
+        userId: tokenRes.body.user.id,
+      }
     })
     return Response.json(deletedUser, {status: 200})
   })

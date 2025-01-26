@@ -78,7 +78,7 @@ model Log {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   message String
   action ActionType
-  date DateTime
+  date DateTime @default(now())
   userId String @map("_userId") @db.ObjectId
   user  User   @relation(fields: [userId], references: [id])
 }

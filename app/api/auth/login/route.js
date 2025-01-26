@@ -18,8 +18,14 @@ export const POST = async (req) => {
     if(!match){
       return Response.json("Invalid password", {status: 401})
     }
-    console.log(FoundUser)
     const token = jwt.sign({id: FoundUser.id, roleId: FoundUser.role.id}, process.env.JWT_SECRET)
+    await prisma.log.create({
+      data: {
+        userId: FoundUser.id,
+        action: "LOGIN",
+        message: `User: "${FoundUser.name}" logged in`
+      }
+    })
     return Response.json({user: {name:FoundUser.name, permissions:FoundUser.role.permissions, email:FoundUser.email}, token}, {status: 200})
   } catch(err){
     console.log(err)

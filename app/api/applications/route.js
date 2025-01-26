@@ -34,6 +34,13 @@ export const POST = async (req) => {
           userId: tokenRes.body.user.id
         }
       })
+      await prisma.log.create({
+        data: {
+          message: `Created new application: "${name}" by "${tokenRes.body.user.name}"`,
+          action: "CREATE_APP",
+          userId: tokenRes.body.user.id
+        }
+      })
       return Response.json({...newApplication,password}, {status: 201})
     })
 }
@@ -58,6 +65,13 @@ export const PUT = async (req) => {
         updatedAt: new Date()
       }
     })
+    await prisma.log.create({
+      data: {
+        message: `Updated application: "${name}" by "${tokenRes.body.user.name}"`,
+        action: "UPDATE_APP",
+        userId: tokenRes.body.user.id
+      }
+    })
     return Response.json({...updatedApplication,password}, {status: 202})
   })
 }
@@ -71,6 +85,13 @@ export const DELETE = async (req) => {
     }
     const deletedApplication = await prisma.application.delete({
       where: {id, userId: tokenRes.body.user.id}
+    })
+    await prisma.log.create({
+      data: {
+        message: `Deleted application: "${deletedApplication.name}" by "${tokenRes.body.user.name}"`,
+        action: "DELETE_APP",
+        userId: tokenRes.body.user.id,
+      }
     })
     return Response.json(deletedApplication, {status: 200})
   })

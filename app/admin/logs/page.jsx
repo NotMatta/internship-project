@@ -14,7 +14,7 @@ import { DatePickerWithRange as DatePicker } from "@/components/date-range-picke
 import { useState } from "react"
 import { addDays } from "date-fns"
 import {redirect} from "next/navigation"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Loader } from "lucide-react"
 
 const actions = ["any","LOGIN","LOGOUT","CREATE_USER","DELETE_USER","UPDATE_USER","CREATE_APP","DELETE_APP","UPDATE_APP","CREATE_ROLE","DELETE_ROLE","UPDATE_ROLE"]
 
@@ -22,29 +22,35 @@ const LogsInput = ({setLogs}) => {
 
   const {session} = useSession()
   const {toast} = useToast()
+  const [loading,setLoading] = useState(false)
+  const d = new Date()
+  d.setHours(0, 0, 0, 0)
 
   const [date, setDate] = useState({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: new Date(d),
+    to: addDays(new Date(d), 20),
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const formData = new FormData(e.target)
     const body = {search:formData.get("search"),type:formData.get("type") || "any",from:date.from.toISOString(),to:date.to.toISOString()}
     console.log(body)
-    const res = fetch(`/api/logs?search=${body.search}&type=${body.type}&from=${body.from}&to=${body.to}`,{
+    const res = await fetch(`/api/logs?search=${body.search}&type=${body.type}&from=${body.from}&to=${body.to}`,{
         method: "GET",
         headers: {
           "Authorization": `Bearer ${session.token}`,
         }
       })
     if(res.ok){
-      const data = res.json()
+      const data = await res.json()
       setLogs(data.logs)
+      setLoading(false)
       return
     }
     toast({title:"Error",description:"Failed to fetch logs."})
+    setLoading(false)
   }
 
   return (
@@ -63,7 +69,7 @@ const LogsInput = ({setLogs}) => {
         </SelectContent>
       </Select>             
       <DatePicker date={date} setDate={setDate} />
-      <Button>Search</Button>
+      <Button disabled={loading}>{!loading ? "Search" : <Loader className="animate-spin repeat-infinite"/>}</Button>
     </form>
   )
 }
@@ -78,20 +84,22 @@ const LogsPage = () => {
     redirect("/profile")
   }
   return (
-    <div className="w-full flex flex-col gap-9">
-      <h1>Logs Page</h1>
+    <div className="w-full flex flex-col gap-9 overflow-y-scroll h-full">
+      <div className="flex justify-between items-center">
+        <h1>Logs Page</h1>
+        {logs.length > 10 && <div className="flex items-center gap-2 text-accent-foreground">
+          <Button size="icon" onClick={() => setPage(page-1)} disabled={page == 1}><ChevronLeft/></Button>
+          <p className="bg-accent rounded-xl w-8 h-10 flex items-center justify-center">{page}</p>
+          <Button size="icon" onClick={() => setPage(page+1)} disabled={(page*10) >= logs.length}><ChevronRight/></Button>
+        </div>}
+      </div>
       <LogsInput setLogs={setLogs}/>
-      {logs.length > 10 && <div className="flex w-full justify-end items-center gap-2 text-accent-foreground">
-        <Button size="icon" onClick={() => setPage(page-1)} disabled={page == 1}><ChevronLeft/></Button>
-        <p className="bg-accent rounded-xl w-8 h-10 flex items-center justify-center">{page}</p>
-        <Button size="icon" onClick={() => setPage(page+1)} disabled={logs.length < 10}><ChevronRight/></Button>
-      </div>}
       <div className="flex flex-col gap-3">
-        {logs.map(log => (
-          <div key={log.id} className="flex flex-col gap-1">
-            <p>{log.date}</p>
-            <p>{log.message}</p>
-            <p>{log.action}</p>
+        {logs.slice((page-1)*10,page*10).map((log) => (
+          <div key={log.id} className="flex flex-col gap-1 border p-4 bg-secondary rounded-xl">
+            <p><strong>Date:</strong> {(new Date(log.date)).toLocaleString()}</p>
+            <p><strong>Message:</strong> {log.message}</p>
+            <p><strong>Action:</strong> {log.action}</p>
           </div>
         ))}
       </div>
