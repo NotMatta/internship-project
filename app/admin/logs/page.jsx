@@ -54,7 +54,7 @@ const LogsInput = ({setLogs}) => {
   }
 
   return (
-    <form className="flex gap-1" onSubmit={handleSubmit}>
+    <form className="flex gap-1 justify-center flex-wrap lg:flex-nowrap" onSubmit={handleSubmit}>
       <Input name="search" placeholder="Search Logs" />
       <Select name="type">
         <SelectTrigger className="w-[180px]">

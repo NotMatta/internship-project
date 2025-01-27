@@ -13,8 +13,8 @@ const DashBoard = () => {
   const repetetivePasswords = applications.filter(app => passwords.filter(p => p == app.password).length > 1)
   const score = calculateOverAllScore(passwords)
   return(
-    <div className="grid grid-cols-3 grid-rows-3 w-full h-full gap-2 [&_div]:bg-secondary">
-      <div className="border rounded-xl col-span-3 row-span-2 p-4 flex flex-col h-full">
+    <div className="grid grid-cols-1 grid-rows-4 lg:grid-cols-3 lg:grid-rows-3 w-full lg:h-full gap-2 [&_div]:bg-secondary">
+      <div className="border rounded-xl lg:col-span-3 row-span-2 p-4 flex flex-col h-full">
         <h1>Dashboard</h1>
         <p>Welcom to your dashboard {session.user.name}</p>
         <p>You have <strong>{applications.length}</strong> applications in this account</p>

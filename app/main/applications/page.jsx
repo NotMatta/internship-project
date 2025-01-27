@@ -20,7 +20,7 @@ const AppsPage = () => {
         <h1>Applications</h1>
         <AddApp/>
       </div>
-      <div className="w-full overflow-y-scroll grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
+      <div className="w-full overflow-y-scroll grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
         {applications && applications.map((application) => (
           <div key={application.id} className="p-4 border rounded-xl flex flex-col gap-4 justify-between w-full bg-accent">
             <h2 className="line-clamp-1 text-xl flex gap-2 items-center border-b border-foreground h-16"><img src={application.logo} className="h-12 w-12"/>{application.name}</h2>

@@ -15,7 +15,7 @@ const PasswordRow = ({application,passwords}) => {
     <tr className="[&>td]:p-2 border bg-secondary">
       <td>
         <div className="flex items-center gap-2">
-          <img src={application.logo} className="h-10 w-10 object-cover rounded"/>
+          <img src={application.logo} className="h-10 w-10 object-cover rounded hidden md:block"/>
           <>{application.name}<br/>{application.address}</>
         </div>
       </td>
@@ -60,9 +60,7 @@ const PasswordsPage = () => {
         </thead>
         <tbody>
           {applications && applications.map((application) => (
-            <>
             <PasswordRow key={application.id} application={application} passwords={passwords}/>
-            </>
           ))}
         </tbody>
       </table>

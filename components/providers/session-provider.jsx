@@ -43,6 +43,41 @@ const SessionProvider = ({ children }) => {
     getLocalSession();
   }, []);
 
+  const editPassword = (formData) => {
+    const body = {
+      password:formData.get("password"),
+      newPassword:formData.get("newPassword"),
+      confirmPassword:formData.get("confirmPassword")
+    }
+
+    if(body.newPassword !== body.confirmPassword){
+      toast({title:"Invalid credentials",description:"Passwords do not match"})
+      return
+    }
+
+    if(validatePassword(body.newPassword) !== "Password is valid."){
+      toast({title:"Invalid credentials",description:validatePassword(body.password)})
+      return
+    }
+
+    fetch("/api/auth/update", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
+      body: JSON.stringify(body),
+    })
+
+    .then((res) => {
+      if(res.ok) {
+        toast({title:"Password updated",description:"Your password has been updated"})
+        return
+      }
+      const message = res.json()
+      toast({title:"Couldn't update password",description:message})
+    })
+  }
+
   const signOut = () => {
     localStorage.removeItem("session");
     setSession({user:null,token:null,status:"unauthenticated"})
@@ -73,7 +108,7 @@ const SessionProvider = ({ children }) => {
   console.log(session)
 
   return (
-    <SessionContext.Provider value={{session, signOut, logIn}}>
+    <SessionContext.Provider value={{session, signOut, logIn, editPassword}}>
       {children}
     </SessionContext.Provider>
   );

@@ -6,7 +6,7 @@ const secret = process.env.SECRET
 
 export const GET = async (req) => {
   return await handle(req,["READ_USERS"],async () => {
-    const users = await prisma.user.findMany({include:{role:true}})
+    const users = await prisma.user.findMany({where:{name:{not:"MASTER ACCOUNT"}},include:{role:true}})
     users.forEach((user) => {
       user.password = decryptData(user.password,secret)
     })

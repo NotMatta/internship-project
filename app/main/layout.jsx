@@ -16,7 +16,9 @@ const MainLayout = ({ children }) => {
   if (session.status === "loading") return <div>Loading...</div>
   return (
     <ApplicationsProvider>
-      {children}
+      <div className="flex flex-col max-h-full h-full overflow-y-scroll">
+        {children}
+      </div>
     </ApplicationsProvider>
   );
 }

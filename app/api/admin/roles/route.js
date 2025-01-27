@@ -3,7 +3,7 @@ import { handle } from "@/lib/utils"
 
 export const GET = async (req) => {
   return await handle(req,["READ_ROLES"], async () => {
-    const roles = await prisma.role.findMany()
+    const roles = await prisma.role.findMany({where:{name: {not:"MASTER"}}})
     return Response.json(roles, {status: 200})
   })
 }

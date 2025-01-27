@@ -45,9 +45,9 @@ A more serious version with more features:
 - [X] Init the project
 - [X] Setup the database
 - [X] Create the authentication system
-- [ ] Create the admin panel
-- [ ] Create the dashboard
+- [X] Create the admin panel
+- [X] Create the dashboard
 - [X] Create the accounts
 - [X] Create the passwords
-- [ ] Create the profile
+- [X] Create the profile
 - [X] Deploy the project
