@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
   DialogClose
 } from "@/components/ui/dialog"
 import { Eye, EyeClosed } from "lucide-react"
@@ -27,6 +28,7 @@ const PopApp = ({application}) => {
             <img src={application.logo} className="h-12 w-12"/>
             {application.name}
           </DialogTitle>
+          <DialogDescription/>
         </DialogHeader>
         <div className="space-y-2">
           <p><strong>Application Name:</strong> {application.name}</p>
@@ -35,7 +37,7 @@ const PopApp = ({application}) => {
           <p><strong>Login:</strong> {application.login}</p>
           <div className="flex gap-1 items-center">
             <strong>Password:</strong>
-            <Input type={!showPassword ? "password" : "text"} value={application.password}/>
+            <Input type={!showPassword ? "password" : "text"} value={application.password} readOnly/>
             <Button onClick={() => setShowPassword(!showPassword)} className="flex-shrink-0" variant="outline" size="icon">
               {showPassword ? <Eye/> : <EyeClosed/>}
             </Button>

@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast"
 import { useSession } from "@/components/providers/session-provider"
 import { useAdmin } from "@/components/providers/admin-provider"
 import { redirect } from "next/navigation"
-import { useEffect } from "react"
 
 const UsersPage = () => {
 
@@ -18,9 +17,6 @@ const UsersPage = () => {
   }
 
   const users = useAdmin().users
-  useEffect(() => {
-    console.log("Users loaded", users)
-  }, [users])
 
   if(!users) return <div>Loading...</div>
   return(

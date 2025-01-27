@@ -7,12 +7,7 @@ import Logo from "./logo"
 import { usePath } from "./providers/path-provider"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "./ui/button"

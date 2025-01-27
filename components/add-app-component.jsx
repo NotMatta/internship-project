@@ -53,7 +53,6 @@ const AddApp = () => {
     if(mutationStatus == "a_error"){
       setResponse("error")
       setMutationStatus("none")
-      toast({title:"Failed to add application",description:"An error occured while adding the application"})
     }
   },[mutationStatus,setMutationStatus,toast])
 

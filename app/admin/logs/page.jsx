@@ -36,7 +36,6 @@ const LogsInput = ({setLogs}) => {
     setLoading(true)
     const formData = new FormData(e.target)
     const body = {search:formData.get("search"),type:formData.get("type") || "any",from:date.from.toISOString(),to:date.to.toISOString()}
-    console.log(body)
     const res = await fetch(`/api/logs?search=${body.search}&type=${body.type}&from=${body.from}&to=${body.to}`,{
         method: "GET",
         headers: {

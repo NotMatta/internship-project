@@ -1,6 +1,5 @@
 "use client"
 import { useAdmin } from "@/components/providers/admin-provider"
-import { useEffect } from "react"
 import { useSession } from "@/components/providers/session-provider"
 import { redirect } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
@@ -16,9 +15,6 @@ const RolesPage = () => {
     redirect("/profile")
   }
   const roles = useAdmin().roles
-  useEffect(() => {
-    console.log("Roles loaded", roles)
-  }, [roles])
 
   if(!roles) return <div>Loading...</div>
   return(

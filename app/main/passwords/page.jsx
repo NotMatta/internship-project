@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "@/components/providers/session-provider";
 import { useApplications } from "@/components/providers/applications-provider";
 import {calculatePasswordScore as score, calculatePasswordStrength as strength, getAgeInDays as age} from "@/lib/utils";
+import PopApp from "@/components/ui/pop-app-component";
 
 const PasswordRow = ({application,passwords}) => {
   const permissions = useSession().session.user.permissions || [];
@@ -29,6 +30,7 @@ const PasswordRow = ({application,passwords}) => {
       <td>{passwordStrength}</td>
       <td>
         <div className="flex justify-end gap-2">
+          <PopApp application={application}/>
           <EditApp application={application}/>
           <DeleteApp application={application}/>
         </div>

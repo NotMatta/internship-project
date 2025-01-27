@@ -95,7 +95,6 @@ const SessionProvider = ({ children }) => {
     })
     if(res.ok) {
       const {user,token} = await res.json()
-      console.log({user,token})
       localStorage.setItem("session", JSON.stringify({user,token}))
       setSession({user,token,status:"authenticated"})
       return
@@ -105,7 +104,6 @@ const SessionProvider = ({ children }) => {
   }
 
   if(session.status === "loading") return <div>Loading...</div>
-  console.log(session)
 
   return (
     <SessionContext.Provider value={{session, signOut, logIn, editPassword}}>

@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken"
 import prisma from "@/prisma/prisma-client"
 
 export const GET = async (req) => {
-  console.log("validation called")
   try{
     const token = req.headers.get("authorization").split(" ")[1]
     if(!token){
@@ -12,7 +11,6 @@ export const GET = async (req) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
       const FoundUser = await prisma.user.findUnique({where: {id: decoded.id}, include:{role:true}})
       const {password, ...user} = FoundUser
-      console.log(user)
       if(!user){
         return Response.json("User not found", {status: 404})
       }

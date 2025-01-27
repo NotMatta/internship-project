@@ -1,4 +1,4 @@
-import { handle } from "@/lib/utils"
+import { handle, isValidEmail, validateUsername, validatePassword } from "@/lib/utils"
 import { encryptData, decryptData } from "@/lib/utils"
 import prisma from "@/prisma/prisma-client"
 
@@ -22,6 +22,15 @@ export const POST = async (req) => {
       console.log(name,email,password,roleId)
       return Response.json("Bad Request", {status: 400})
     }
+    if(validateUsername(name) != "Username is valid."){
+      return Response.json(validateUsername(name), {status: 400})
+    }
+    if(validatePassword(password) != "Password is valid."){
+      return Response.json(validatePassword(password), {status: 400})
+    }
+    if(!isValidEmail(email)){
+      return Response.json("Invalid Email", {status: 400})
+    }
     const roleIsMaster = await prisma.role.findFirst({
       where:{
         id: roleId
@@ -31,22 +40,26 @@ export const POST = async (req) => {
       return Response.json("Rejection", {status: 401})
     }
     const encyptedPassword = encryptData(password,secret)
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: encyptedPassword,
-        roleId
-      },include:{role:true}
-    })
-    await prisma.log.create({
-      data: {
-        message: `Created new user: "${name}" by "${tokenRes.body.user.name}"`,
-        action: "CREATE_USER",
-        userId: tokenRes.body.user.id
-      }
-    })
-    return Response.json({...newUser,password}, {status: 201})
+    try{
+      const newUser = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: encyptedPassword,
+          roleId
+        },include:{role:true}
+      })
+      await prisma.log.create({
+        data: {
+          message: `Created new user: "${name}" by "${tokenRes.body.user.name}"`,
+          action: "CREATE_USER",
+          userId: tokenRes.body.user.id
+        }
+      })
+      return Response.json({...newUser,password}, {status: 201})
+    }catch(e){
+      return Response.json("User already exists", {status: 400})
+    }
   })
 }
 
@@ -56,6 +69,15 @@ export const PUT = async (req) => {
     const {id,name,email,password,roleId} = body
     if(!id || !name || !email || !password || !roleId){
       return Response.json("Bad Request", {status: 400})
+    }
+    if(validateUsername(name) != "Username is valid."){
+      return Response.json(validateUsername(name), {status: 400})
+    }
+    if(validatePassword(password) != "Password is valid."){
+      return Response.json(validatePassword(password), {status: 400})
+    }
+    if(!isValidEmail(email)){
+      return Response.json("Invalid Email", {status: 400})
     }
     if(id == tokenRes.body.user.id){
       return Response.json("You can't edit your own account, use Another.", {status: 401})

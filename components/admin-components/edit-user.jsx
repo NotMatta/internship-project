@@ -37,7 +37,7 @@ const EditUser = ({user}) => {
     const formData = new FormData(e.target);
     if(user.name == formData.get("name") && user.email == formData.get("email") && user.roleId == formData.get("roleId" && user.password == formData.get("password"))){
       toast({title:"Invalid",description:"No changes made to the user"})
-      setResponse("invalid");
+      setResponse("error");
       setMutationStatus("none")
       return
     }
@@ -72,7 +72,6 @@ const EditUser = ({user}) => {
             <DialogTitle>Editing a new user</DialogTitle>
           </DialogHeader>
           <DialogDescription>Fill in the form below to edit a user</DialogDescription>
-          {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
           <div className="space-y-2 mt-2">
             <input type="hidden" name="id" value={user.id}/>
             <Input name="name" type="text" placeholder="Name" required defaultValue={user.name}/>

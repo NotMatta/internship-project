@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useQueryClient } from "@tanstack/react-query"
 import { redirect } from "next/navigation"
+import { isValidEmail, validatePassword, validateUsername } from "@/lib/utils"
 
 const AdminContext = createContext()
 
@@ -58,8 +59,22 @@ export const AdminProvider = ({children}) => {
 
   const createUser = useMutation({
     mutationFn: async (formData) => {
-      console.log("Creating a User", formData,"with",session.token);
       const { name, email, password, roleId} = {name:formData.get("name"),email:formData.get("email"),password:formData.get("password"),roleId:formData.get("roleId")};
+      if(!isValidEmail(email)){
+        setMutationStatus("u_error")
+        toast({title:"Invalid email",description:"Please enter a valid email"})
+        throw new Error("Invalid email")
+      }
+      if(validatePassword(password) != "Password is valid."){
+        setMutationStatus("u_error")
+        toast({title:"Invalid password",description:validatePassword(password)})
+        throw new Error("Invalid password")
+      }
+      if(validateUsername(name) != "Username is valid."){
+        setMutationStatus("u_error")
+        toast({title:"Invalid username",description:validateUsername(name)})
+        throw new Error("Invalid username")
+      }
       const res = await fetch("/api/admin/users/", {
         method: "POST",
         headers: {
@@ -77,15 +92,28 @@ export const AdminProvider = ({children}) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("User Created",newData)
       queryClient.setQueryData(['users'],(oldData) => [...oldData,newData])
     }
   })
 
   const editUser = useMutation({
     mutationFn: async (formData) => {
-      console.log("Editing a User", formData,"with",session.token);
       const { name, email, password, roleId, id } = {name:formData.get("name"),email:formData.get("email"),password:formData.get("password"),roleId:formData.get("roleId"),id:formData.get("id")};
+      if(!isValidEmail(email)){
+        setMutationStatus("u_error")
+        toast({title:"Invalid email",description:"Please enter a valid email"})
+        throw new Error("Invalid email")
+      }
+      if(validatePassword(password) != "Password is valid."){
+        setMutationStatus("u_error")
+        toast({title:"Invalid password",description:validatePassword(password)})
+        throw new Error("Invalid password")
+      }
+      if(validateUsername(name) != "Username is valid."){
+        setMutationStatus("u_error")
+        toast({title:"Invalid username",description:validateUsername(name)})
+        throw new Error("Invalid username")
+      }
       const res = await fetch("/api/admin/users/", {
         method: "PUT",
         headers: {
@@ -103,14 +131,12 @@ export const AdminProvider = ({children}) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("User Edited",newData)
       queryClient.setQueryData(['users'],(oldData) => oldData.map((user) => user.id == newData.id ? newData : user))
     }
   })
 
   const deleteUser = useMutation({
     mutationFn: async (formData) => {
-      console.log("Deleting a User", formData,"with",session.token);
       const { id } = {id:formData.get("id")};
       const res = await fetch("/api/admin/users/", {
         method: "DELETE",
@@ -129,14 +155,12 @@ export const AdminProvider = ({children}) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("User Deleted",newData)
       queryClient.setQueryData(['users'],(oldData) => oldData.filter((user) => user.id !== newData.id))
     }
   })
 
   const createRole = useMutation({
     mutationFn: async (formData) => {
-      console.log("Creating a Role", formData,"with",session.token);
       const { name, permissions } = {name:formData.get("name"),permissions:formData.getAll("permissions")};
       const res = await fetch("/api/admin/roles/", {
         method: "POST",
@@ -155,14 +179,12 @@ export const AdminProvider = ({children}) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("Role Created",newData)
       queryClient.setQueryData(['roles'],(oldData) => [...oldData,newData])
     }
   })
 
   const editRole = useMutation({
     mutationFn: async (formData) => {
-      console.log("Editing a Role", formData,"with",session.token);
       const { name, permissions, id } = {name:formData.get("name"),permissions:formData.getAll("permissions"),id:formData.get("id")};
       const res = await fetch("/api/admin/roles/", {
         method: "PUT",
@@ -181,14 +203,12 @@ export const AdminProvider = ({children}) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("Role Edited",newData)
       queryClient.setQueryData(['roles'],(oldData) => oldData.map((role) => role.id == newData.id ? newData : role))
     }
   })
 
   const deleteRole = useMutation({
     mutationFn: async (formData) => {
-      console.log("Deleting a Role", formData,"with",session.token);
       const { id } = {id:formData.get("id")};
       const res = await fetch("/api/admin/roles/", {
         method: "DELETE",
@@ -207,7 +227,6 @@ export const AdminProvider = ({children}) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("Role Deleted",newData)
       queryClient.setQueryData(['roles'],(oldData) => oldData.filter((role) => role.id !== newData.id))
     }
   })

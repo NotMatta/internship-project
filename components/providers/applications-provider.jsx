@@ -1,12 +1,15 @@
 "use client"
-import { useContext, createContext, useEffect, useState } from "react";
+import { useContext, createContext, useState } from "react";
 import { useSession } from "./session-provider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { isValidIP, isValidURL } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const applicationsContext = createContext();
 
 const ApplicationsContextProvider = ({ children }) => {
   const [mutationStatus,setMutationStatus] = useState("none")
+  const {toast} = useToast()
   const { session } = useSession();
   const queryClient = useQueryClient()
 
@@ -24,8 +27,12 @@ const ApplicationsContextProvider = ({ children }) => {
 
   const createApplication = useMutation({
     mutationFn: async (formData) => {
-      console.log("Creating applications", formData,"with",session.token);
       const { logo, name, address, type, login, password } =  {logo:formData.get("logo"),name:formData.get("name"),address:formData.get("address"),type:formData.get("type"),login:formData.get("login"),password:formData.get("password")};
+      if(type == "URL" && !isValidURL(address) || type == "IP" && !isValidIP(address)){
+        setMutationStatus("a_error")
+        toast({title:"Invalid address",description:"Please enter a valid address"})
+        throw new Error("Invalid address")
+      }
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: {
@@ -35,21 +42,26 @@ const ApplicationsContextProvider = ({ children }) => {
       });
       if(!res.ok) {
         setMutationStatus("a_error")
+        const message = await res.json()
+        toast({title:"Error",description:message})
         throw new Error("Failed to create applications")
       }
       setMutationStatus("a_success")
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("Applications created",newData)
       queryClient.setQueryData(['applications'],(oldData) => [...oldData,newData])
     }
   })
 
   const editApplication = useMutation({
     mutationFn: async (formData) => {
-      console.log("Editing applications", formData,"with",session.token);
       const { logo, name, address, type, login, password, id } =  {logo:formData.get("logo"),name:formData.get("name"),address:formData.get("address"),type:formData.get("type"),login:formData.get("login"),password:formData.get("password"),id:formData.get("id")};
+      if(type == "URL" && !isValidURL(address) || type == "IP" && !isValidIP(address)){
+        setMutationStatus("a_error")
+        toast({title:"Invalid address",description:"Please enter a valid address"})
+        throw new Error("Invalid address")
+      }
       const res = await fetch("/api/applications", {
         method: "PUT",
         headers: {
@@ -59,20 +71,20 @@ const ApplicationsContextProvider = ({ children }) => {
       });
       if(!res.ok) {
         setMutationStatus("e_error")
+        const message = await res.json()
+        toast({title:"Error",description:message})
         throw new Error("Failed to edit applications")
       }
       setMutationStatus("e_success")
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("Applications edited",newData)
       queryClient.setQueryData(['applications'],(oldData) => oldData.map((data) => data.id == newData.id ? newData : data))
     }
   })
 
   const deleteApplication = useMutation({
     mutationFn: async (formData) => {
-      console.log("Deleting applications", formData,"with",session.token);
       const { id } =  {id:formData.get("id")};
       const res = await fetch("/api/applications", {
         method: "DELETE",
@@ -89,7 +101,6 @@ const ApplicationsContextProvider = ({ children }) => {
       return res.json()
     },
     onSuccess: (newData) => {
-      console.log("Applications deleted",newData)
       queryClient.setQueryData(['applications'],(oldData) => oldData.filter((data) => data.id != newData.id))
     }
   })

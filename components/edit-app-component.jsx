@@ -38,7 +38,7 @@ const EditApp = ({application}) => {
     const formData = new FormData(e.target);
     if(application.name == formData.get("name") && application.login == formData.get("login") && application.password == formData.get("password") && application.logo == formData.get("logo") && application.address == formData.get("address") && application.type == formData.get("type")){
       toast({title:"Invalid",description:"No changes made to the application"})
-      setResponse("invalid");
+      setResponse("error")
       return
     }
     setMutationStatus("loading")
@@ -53,7 +53,6 @@ const EditApp = ({application}) => {
     if(mutationStatus == "e_error"){
       setResponse("error")
       setMutationStatus("none")
-      toast({title:"Failed to edit application",description:"An error occured while editing the application"})
     }
   },[mutationStatus,setMutationStatus,toast])
 
@@ -71,7 +70,6 @@ const EditApp = ({application}) => {
             <DialogTitle>Editing an application</DialogTitle>
           </DialogHeader>
           <DialogDescription>Fill in the form below to edit this application</DialogDescription>
-          {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
           <div className="space-y-2">
             <input type="hidden" name="id" defaultValue={application.id}/>
             <div className="flex gap-2 items-center">
