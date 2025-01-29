@@ -29,7 +29,7 @@ const PasswordRow = ({application,passwords}) => {
       <td>{passwordAge} days</td>
       <td>{passwordStrength}</td>
       <td>
-        <div className="flex justify-end gap-2">
+        <div className="flex gap-2">
           <PopApp application={application}/>
           <EditApp application={application}/>
           <DeleteApp application={application}/>
@@ -48,7 +48,7 @@ const PasswordsPage = () => {
   }, [applications])
 
   return (
-    <div className="max-h-full overflow-y-scroll flex flex-col gap-9">
+    <div className="max-h-full flex flex-col gap-9">
       <h1>Passwords</h1>
       <table className="w-full border">
         <thead>

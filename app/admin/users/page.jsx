@@ -20,7 +20,7 @@ const UsersPage = () => {
 
   if(!users) return <div>Loading...</div>
   return(
-    <div className="flex flex-col gap-9">
+    <div className="flex flex-col gap-9 overflow-y-scroll max-h-full">
       <div className="flex justify-between items-center">
         <h1>Manage Users</h1>
         <AddUser/>
