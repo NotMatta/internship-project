@@ -26,7 +26,6 @@ export const POST = async (req) => {
     if(type == "URL" && !isValidURL(address) || type == "IP" && !isValidIP(address)){
       return Response.json("Invalid address", {status: 400})
     }
-    console.log(tokenRes.body.user.id)
     const encyptedPassword = encryptData(password,secret)
     const newApplication = await prisma.application.create({
       data: {

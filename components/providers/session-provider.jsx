@@ -55,8 +55,8 @@ const SessionProvider = ({ children }) => {
       return
     }
 
-    if(validatePassword(body.newPassword) !== "Password is valid."){
-      toast({title:"Invalid credentials",description:validatePassword(body.password)})
+    if(!validatePassword(body.newPassword).isValid){
+      toast({title:"Invalid credentials",description:validatePassword(body.password).message})
       return
     }
 
@@ -85,8 +85,8 @@ const SessionProvider = ({ children }) => {
 
   const logIn = async (credentials) => {
     const {email,password} = {email:credentials.get("email"),password:credentials.get("password")};
-    if(validatePassword(password) !== "Password is valid."){
-      toast({title:"Invalid credentials",description:validatePassword(password)})
+    if(!validatePassword(password).isValid){
+      toast({title:"Invalid credentials",description:validatePassword(password).message})
       return
     }
     const res = await fetch("/api/auth/login", {

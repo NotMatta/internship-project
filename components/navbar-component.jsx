@@ -1,5 +1,5 @@
 "use client"
-import { AppWindow, FileClock, KeyRound, LayoutDashboard, Menu, Shield, Tag, User, UserRound } from "lucide-react"
+import { AppWindow, FileClock, KeyRound, LayoutDashboard, LogOut, Menu, Shield, Tag, User, UserRound } from "lucide-react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useSession } from "./providers/session-provider"
@@ -34,7 +34,7 @@ const NavLink = ({children,href,permission}) => {
 
 const NavbarContent = ({className}) => {
   const {path, setPath} = usePath()
-  const {session}= useSession()
+  const {session, signOut}= useSession()
   const permissions = session.user?.permissions || []
 
   if(session.status == "unauthenticated" || path == "") return null
@@ -57,6 +57,7 @@ const NavbarContent = ({className}) => {
           <NavLink href="/admin/roles" permission="READ_ROLES"><Tag />Roles</NavLink>
           <NavLink href="/admin/logs" permission="READ_LOGS"><FileClock />Logs</NavLink>
         </div>
+        <button className="text-accent-foreground flex gap-2 px-2 py-3 rounded-xl hover:bg-accent hover:text-primary" onClick={signOut}><LogOut/>Sign out</button>
       </nav>
     </div>
   )
@@ -79,7 +80,7 @@ const Navbar = () => {
   return(
     <>
       <NavBarSheet/> 
-      <NavbarContent className="hidden lg:block min-w-[300px] border-r h-full"/>
+      <NavbarContent className="hidden lg:block min-w-[300px] border-r h-full "/>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { decryptData } from "@/lib/utils"
+import { decryptData, isValidEmail, validatePassword } from "@/lib/utils"
 import jwt from "jsonwebtoken"
 import prisma from "@/prisma/prisma-client"
 
@@ -10,13 +10,19 @@ export const POST = async (req) => {
     if(body.email === undefined || body.password === undefined){
       return Response.json("email and password are required", {status: 400})
     }
+    if(isValidEmail(body.email) == false){
+      return Response.json("Invalid Email", {status: 400})
+    }
+    if(!validatePassword(body.password).isValid){
+      return Response.json(validatePassword(body.password).message, {status:400})
+    }
     const FoundUser = await prisma.user.findFirst({where: {email: body.email},include:{role:true}})
     if(!FoundUser){
       return Response.json("User not found", {status: 404})
     }
     const match = (body.password == decryptData(FoundUser.password,secret))
     if(!match){
-      return Response.json("Invalid password", {status: 401})
+      return Response.json("Incorrect password", {status: 401})
     }
     const token = jwt.sign({id: FoundUser.id, roleId: FoundUser.role.id}, process.env.JWT_SECRET)
     await prisma.log.create({

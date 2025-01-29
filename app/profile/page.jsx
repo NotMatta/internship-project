@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const ProfilePage = () => {
-  const {session, signOut, editPassword } = useSession();
+  const {session, editPassword } = useSession();
   const {setPath} = usePath()
   useEffect(() => {
     setPath("profile")
@@ -38,7 +38,6 @@ const ProfilePage = () => {
         <Button type="reset" variant="outline" className="mr-2">Cancel</Button>
         <Button type="submit">Save</Button>
       </form>
-      <Button onClick={signOut}>Sign Out</Button>
     </div>
   )
 }

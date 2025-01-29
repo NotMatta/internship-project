@@ -15,7 +15,6 @@ enum Permission {
   READ_ROLES
   WRITE_ROLES
   READ_LOGS
-  WRITE_LOGS
   MASTER
 }
 
@@ -79,6 +78,6 @@ model Log {
   message String
   action ActionType
   date DateTime @default(now())
-  userId String @map("_userId") @db.ObjectId
-  user  User   @relation(fields: [userId], references: [id])
+  userId String? @map("_userId") @db.ObjectId
+  user  User?   @relation(fields: [userId], references: [id])
 }

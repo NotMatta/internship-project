@@ -18,7 +18,6 @@ export const GET = async(req) => {
       },
       orderBy: {date: "desc"},
     });
-    console.log("Logs:",logs);
     return Response.json({logs},{status:200});
   })
 }

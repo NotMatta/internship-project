@@ -65,14 +65,14 @@ export const AdminProvider = ({children}) => {
         toast({title:"Invalid email",description:"Please enter a valid email"})
         throw new Error("Invalid email")
       }
-      if(validatePassword(password) != "Password is valid."){
+      if(!validatePassword(password).isValid){
         setMutationStatus("u_error")
-        toast({title:"Invalid password",description:validatePassword(password)})
+        toast({title:"Invalid password",description:validatePassword(password).message})
         throw new Error("Invalid password")
       }
-      if(validateUsername(name) != "Username is valid."){
+      if(!validateUsername(name).isValid){
         setMutationStatus("u_error")
-        toast({title:"Invalid username",description:validateUsername(name)})
+        toast({title:"Invalid username",description:validateUsername(name).message})
         throw new Error("Invalid username")
       }
       const res = await fetch("/api/admin/users/", {
@@ -104,14 +104,14 @@ export const AdminProvider = ({children}) => {
         toast({title:"Invalid email",description:"Please enter a valid email"})
         throw new Error("Invalid email")
       }
-      if(validatePassword(password) != "Password is valid."){
+      if(!validatePassword(password).isValid){
         setMutationStatus("u_error")
-        toast({title:"Invalid password",description:validatePassword(password)})
+        toast({title:"Invalid password",description:validatePassword(password).message})
         throw new Error("Invalid password")
       }
-      if(validateUsername(name) != "Username is valid."){
+      if(!validateUsername(name).isValid){
         setMutationStatus("u_error")
-        toast({title:"Invalid username",description:validateUsername(name)})
+        toast({title:"Invalid username",description:validateUsername(name).message})
         throw new Error("Invalid username")
       }
       const res = await fetch("/api/admin/users/", {

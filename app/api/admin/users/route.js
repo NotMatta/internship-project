@@ -22,11 +22,11 @@ export const POST = async (req) => {
       console.log(name,email,password,roleId)
       return Response.json("Bad Request", {status: 400})
     }
-    if(validateUsername(name) != "Username is valid."){
-      return Response.json(validateUsername(name), {status: 400})
+    if(!validateUsername(name).isValid){
+      return Response.json(validateUsername(name).message, {status: 400})
     }
-    if(validatePassword(password) != "Password is valid."){
-      return Response.json(validatePassword(password), {status: 400})
+    if(!validatePassword(password).isValid){
+      return Response.json(validatePassword(password).message, {status: 400})
     }
     if(!isValidEmail(email)){
       return Response.json("Invalid Email", {status: 400})
@@ -70,11 +70,11 @@ export const PUT = async (req) => {
     if(!id || !name || !email || !password || !roleId){
       return Response.json("Bad Request", {status: 400})
     }
-    if(validateUsername(name) != "Username is valid."){
-      return Response.json(validateUsername(name), {status: 400})
+    if(!validateUsername(name).isValid){
+      return Response.json(validateUsername(name).message, {status: 400})
     }
-    if(validatePassword(password) != "Password is valid."){
-      return Response.json(validatePassword(password), {status: 400})
+    if(!validatePassword(password).isValid){
+      return Response.json(validatePassword(password).message, {status: 400})
     }
     if(!isValidEmail(email)){
       return Response.json("Invalid Email", {status: 400})

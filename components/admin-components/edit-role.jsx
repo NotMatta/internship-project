@@ -67,7 +67,7 @@ const EditRole = ({role}) => {
           <Input name="name" defaultValue={role.name}/>
           <p className="text-sm text-gray-500">Permissions</p>
           <div className="grid grid-cols-2 gap-4 text-sm">
-            {["READ_APPS","WRITE_APPS","READ_USERS","WRITE_USERS","READ_ROLES","WRITE_ROLES","READ_LOGS","WRITE_LOGS"].map((permission) => (
+            {["READ_APPS","WRITE_APPS","READ_USERS","WRITE_USERS","READ_ROLES","WRITE_ROLES","READ_LOGS"].map((permission) => (
               <div key={permission} className="flex items-center gap-2 w-5/12">
                 <Checkbox name="permissions" id={permission} value={permission} defaultChecked={role.permissions.includes(permission)}/>
                 <label htmlFor={permission}>{permission}</label>

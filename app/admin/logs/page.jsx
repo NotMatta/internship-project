@@ -97,7 +97,7 @@ const LogsPage = () => {
         {logs.slice((page-1)*10,page*10).map((log) => (
           <div key={log.id} className="flex flex-col gap-1 border p-4 bg-secondary rounded-xl">
             <p><strong>Date:</strong> {(new Date(log.date)).toLocaleString()}</p>
-            <p><strong>Message:</strong> {log.message}</p>
+            <p><strong>Message:</strong> {log.message} {!log.userId && "(deleted user)"}</p>
             <p><strong>Action:</strong> {log.action}</p>
           </div>
         ))}

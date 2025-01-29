@@ -10,7 +10,7 @@ import {
   DialogClose
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button";
-import { Plus, Eye, EyeOff } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Input } from "../ui/input";
 import { useAdmin } from "../providers/admin-provider";
 import { useEffect, useState } from "react";
@@ -61,7 +61,7 @@ const AddRole = () => {
             <Input type="text" placeholder="Role name..." name="name" required/>
             <p className="text-lg">Permissions</p>
             <div className="grid grid-cols-2 gap-4 text-sm">
-              {["READ_USERS","WRITE_USERS","READ_APPS","WRITE_APPS","READ_ROLES","WRITE_ROLES","READ_LOGS","WRITE_LOGS"].map((permission) => (
+              {["READ_USERS","WRITE_USERS","READ_APPS","WRITE_APPS","READ_ROLES","WRITE_ROLES","READ_LOGS"].map((permission) => (
                 <div key={permission} className="flex items-center gap-2 w-5/12">
                   <Checkbox name="permissions" value={permission} id={permission}/>
                   <label htmlFor={permission}>{permission}</label>
