@@ -29,14 +29,14 @@ const DeleteRole = ({role}) => {
   }
 
   useEffect(() => {
-    if(mutationStatus == "rd_success"){
-      setMutationStatus("none")
-      toast({title:"Role deleted",description:"The role has been deleted"})
-    }
-    if(mutationStatus == "rd_error"){
-      setMutationStatus("none")
-    }
-  },[mutationStatus,setMutationStatus,toast])
+  if(mutationStatus == "rd_success"){
+    setMutationStatus("none");
+    toast({title:"Rôle supprimé",description:"Le rôle a été supprimé"});
+  }
+  if(mutationStatus == "rd_error"){
+    setMutationStatus("none");
+  }
+},[mutationStatus,setMutationStatus,toast]);
 
   if(!permissions.includes("WRITE_ROLES") && !permissions.includes("MASTER")) return null
 
@@ -48,16 +48,16 @@ const DeleteRole = ({role}) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Deleting a role</DialogTitle>
+            <DialogTitle>Supprimer un rôle</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Are you sure you want to delete the role?</DialogDescription>
+          <DialogDescription>Êtes-vous sûr de vouloir supprimer le rôle ?</DialogDescription>
           <input type="hidden" name="id" defaultValue={role.id}/>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline" type="reset">Cancel</Button>
+              <Button variant="outline" type="reset">Annuler</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button variant="destructive" type="submit">Delete</Button>
+              <Button variant="destructive" type="submit">Supprimer</Button>
             </DialogClose>
           </DialogFooter>
         </form>

@@ -1,5 +1,5 @@
 "use client"
-import { useContext, createContext, useState, useEffect } from "react"
+import { useContext, createContext, useState} from "react"
 import { useSession } from "./session-provider"
 import { useToast } from "@/hooks/use-toast"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -18,7 +18,7 @@ export const AdminProvider = ({children}) => {
   const { toast } = useToast()
 
   if(!permissions.includes("READ_USERS") && !permissions.includes("MASTER") && !permissions.includes("READ_ROLES") && !permissions.includes("READ_LOGS")){
-    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
+    toast({title:"Non autorisé",description:"Vous n'avez pas la permission de voir cette page."});
     redirect("/profile")
   }      
 
@@ -32,7 +32,7 @@ export const AdminProvider = ({children}) => {
       if(res.status == 403){
         setViewUsers(false)
       }
-      toast({title:"Error",description:"Failed to fetch users"})
+      toast({title:"Erreur",description:"Échec de la récupération des utilisateurs"});
       throw new Error("Failed to fetch users")
     }
     return res.json()
@@ -50,6 +50,7 @@ export const AdminProvider = ({children}) => {
       if(res.status == 403){
         setViewRoles(false)
       }
+      toast({title:"Erreur",description:"Échec de la récupération des rôles"});
       throw new Error("Failed to fetch roles")
     }
     return res.json()
@@ -62,17 +63,17 @@ export const AdminProvider = ({children}) => {
       const { name, email, password, roleId} = {name:formData.get("name"),email:formData.get("email"),password:formData.get("password"),roleId:formData.get("roleId")};
       if(!isValidEmail(email)){
         setMutationStatus("u_error")
-        toast({title:"Invalid email",description:"Please enter a valid email"})
+        toast({title:"Email invalide",description:"Veuillez saisir un email valide"});
         throw new Error("Invalid email")
       }
       if(!validatePassword(password).isValid){
         setMutationStatus("u_error")
-        toast({title:"Invalid password",description:validatePassword(password).message})
+        toast({title:"Mot de passe invalide",description:validatePassword(password).message});
         throw new Error("Invalid password")
       }
       if(!validateUsername(name).isValid){
         setMutationStatus("u_error")
-        toast({title:"Invalid username",description:validateUsername(name).message})
+        toast({title:"Nom d'utilisateur invalide",description:validateUsername(name).message});
         throw new Error("Invalid username")
       }
       const res = await fetch("/api/admin/users/", {
@@ -85,7 +86,7 @@ export const AdminProvider = ({children}) => {
       if(!res.ok) {
         setMutationStatus("u_error")
         const message = await res.json()
-        toast({title:"Error",description:message})
+        toast({title:"Erreur",description:message})
         throw new Error(message)
       }
       setMutationStatus("u_success")
@@ -100,19 +101,19 @@ export const AdminProvider = ({children}) => {
     mutationFn: async (formData) => {
       const { name, email, password, roleId, id } = {name:formData.get("name"),email:formData.get("email"),password:formData.get("password"),roleId:formData.get("roleId"),id:formData.get("id")};
       if(!isValidEmail(email)){
-        setMutationStatus("u_error")
-        toast({title:"Invalid email",description:"Please enter a valid email"})
-        throw new Error("Invalid email")
+        setMutationStatus("u_error");
+        toast({title:"Email invalide",description:"Veuillez saisir un email valide"});
+        throw new Error("Email invalide");
       }
       if(!validatePassword(password).isValid){
-        setMutationStatus("u_error")
-        toast({title:"Invalid password",description:validatePassword(password).message})
-        throw new Error("Invalid password")
+        setMutationStatus("u_error");
+        toast({title:"Mot de passe invalide",description:validatePassword(password).message});
+        throw new Error("Mot de passe invalide");
       }
       if(!validateUsername(name).isValid){
-        setMutationStatus("u_error")
-        toast({title:"Invalid username",description:validateUsername(name).message})
-        throw new Error("Invalid username")
+        setMutationStatus("u_error");
+        toast({title:"Nom d'utilisateur invalide",description:validateUsername(name).message});
+        throw new Error("Nom d'utilisateur invalide");
       }
       const res = await fetch("/api/admin/users/", {
         method: "PUT",
@@ -122,18 +123,18 @@ export const AdminProvider = ({children}) => {
         body: JSON.stringify({name,email,password,roleId,id}),
       });
       if(!res.ok) {
-        setMutationStatus("ue_error")
-        const message = await res.json()
-        toast({title:"Error",description:message})
-        throw new Error(message)
+        setMutationStatus("ue_error");
+        const message = await res.json();
+        toast({title:"Erreur",description:message});
+        throw new Error(message);
       }
-      setMutationStatus("ue_success")
-      return res.json()
+      setMutationStatus("ue_success");
+      return res.json();
     },
     onSuccess: (newData) => {
-      queryClient.setQueryData(['users'],(oldData) => oldData.map((user) => user.id == newData.id ? newData : user))
+      queryClient.setQueryData(['users'],(oldData) => oldData.map((user) => user.id == newData.id ? newData : user));
     }
-  })
+  });
 
   const deleteUser = useMutation({
     mutationFn: async (formData) => {
@@ -146,19 +147,19 @@ export const AdminProvider = ({children}) => {
         body: JSON.stringify({id}),
       });
       if(!res.ok) {
-        setMutationStatus("ud_error")
-        const message = await res.json()
-        toast({title:"Error",description:message})
-        throw new Error(message)
+        setMutationStatus("ud_error");
+        const message = await res.json();
+        toast({title:"Erreur",description:message});
+        throw new Error(message);
       }
-      setMutationStatus("ud_success")
-      return res.json()
+      setMutationStatus("ud_success");
+      return res.json();
     },
     onSuccess: (newData) => {
-      queryClient.setQueryData(['users'],(oldData) => oldData.filter((user) => user.id !== newData.id))
+      queryClient.setQueryData(['users'],(oldData) => oldData.filter((user) => user.id !== newData.id));
     }
-  })
-
+  });
+  
   const createRole = useMutation({
     mutationFn: async (formData) => {
       const { name, permissions } = {name:formData.get("name"),permissions:formData.getAll("permissions")};
@@ -170,18 +171,18 @@ export const AdminProvider = ({children}) => {
         body: JSON.stringify({name,permissions}),
       });
       if(!res.ok) {
-        setMutationStatus("r_error")
-        const message = await res.json()
-        toast({title:"Error",description:message})
-        throw new Error(message)
+        setMutationStatus("r_error");
+        const message = await res.json();
+        toast({title:"Erreur",description:message});
+        throw new Error(message);
       }
-      setMutationStatus("r_success")
-      return res.json()
+      setMutationStatus("r_success");
+      return res.json();
     },
     onSuccess: (newData) => {
-      queryClient.setQueryData(['roles'],(oldData) => [...oldData,newData])
+      queryClient.setQueryData(['roles'],(oldData) => [...oldData,newData]);
     }
-  })
+  });
 
   const editRole = useMutation({
     mutationFn: async (formData) => {
@@ -194,19 +195,19 @@ export const AdminProvider = ({children}) => {
         body: JSON.stringify({name,permissions,id}),
       });
       if(!res.ok) {
-        setMutationStatus("re_error")
-        const message = await res.json()
-        toast({title:"Error",description:message})
-        throw new Error(message)
+        setMutationStatus("re_error");
+        const message = await res.json();
+        toast({title:"Erreur",description:message});
+        throw new Error(message);
       }
-      setMutationStatus("re_success")
-      return res.json()
+      setMutationStatus("re_success");
+      return res.json();
     },
     onSuccess: (newData) => {
-      queryClient.setQueryData(['roles'],(oldData) => oldData.map((role) => role.id == newData.id ? newData : role))
+      queryClient.setQueryData(['roles'],(oldData) => oldData.map((role) => role.id == newData.id ? newData : role));
     }
-  })
-
+  });
+  
   const deleteRole = useMutation({
     mutationFn: async (formData) => {
       const { id } = {id:formData.get("id")};
@@ -218,20 +219,20 @@ export const AdminProvider = ({children}) => {
         body: JSON.stringify({id}),
       });
       if(!res.ok) {
-        setMutationStatus("rd_error")
-        const message = await res.json()
-        toast({title:"Error",description:message})
-        throw new Error(message)
+        setMutationStatus("rd_error");
+        const message = await res.json();
+        toast({title:"Erreur",description:message});
+        throw new Error(message);
       }
-      setMutationStatus("rd_success")
-      return res.json()
+      setMutationStatus("rd_success");
+      return res.json();
     },
     onSuccess: (newData) => {
-      queryClient.setQueryData(['roles'],(oldData) => oldData.filter((role) => role.id !== newData.id))
+      queryClient.setQueryData(['roles'],(oldData) => oldData.filter((role) => role.id !== newData.id));
     }
-  })
+  });
 
-  if ( !users && !roles) {
+  if ( !users && !roles && (permissions.includes("READ_USERS") || permissions.includes("MASTER") || permissions.includes("READ_ROLES"))){
       return (
         <div>
           <h1>Loading...</h1>

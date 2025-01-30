@@ -64,44 +64,44 @@ const AddUser = () => {
       <DialogContent>
         {res != "success" ? <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Adding a new user</DialogTitle>
+            <DialogTitle>Ajouter un nouvel utilisateur</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Fill in the form below to add a new user</DialogDescription>
-          {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
+          <DialogDescription>Remplissez le formulaire ci-dessous pour ajouter un nouvel utilisateur</DialogDescription>
+          {res == "invalid" && <DialogDescription className="text-red-500">*Assurez-vous de fournir des entrées valides</DialogDescription>}
           <div className="space-y-2 mt-2">
-            <Input name="name" type="text" placeholder="Name" required/>
-            <Input name="email" type="email" placeholder="Email" required/>
+            <Input name="name" type="text" placeholder="Nom" required/>
+            <Input name="email" type="email" placeholder="E-mail" required/>
             <div className="flex gap-2">
-              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Password" required/>
+              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Mot de passe" required/>
               <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
             </div>
             <Select name="roleId" required={true}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Role" />
+                <SelectValue placeholder="Sélectionner un rôle" />
               </SelectTrigger>
               <SelectContent>
                 {roles.map((role) => <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>)}
               </SelectContent>
-            </Select>             
+            </Select>
           </div>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline" type="reset">Cancel</Button>
+              <Button variant="outline" type="reset">Annuler</Button>
             </DialogClose>
-            <Button type="submit" disabled={mutationStatus == "loading"}>Add User</Button>
+            <Button type="submit" disabled={mutationStatus == "loading"}>Ajouter un utilisateur</Button>
           </DialogFooter>
         </form>:
-          <div>
+        <div>
           <DialogHeader>
-            <DialogTitle>Successfully added a new user!</DialogTitle>
+            <DialogTitle>Utilisateur ajouté avec succès !</DialogTitle>
           </DialogHeader>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline" onClick={() => setResponse("none")}>Close</Button>
+              <Button variant="outline" onClick={() => setResponse("none")}>Fermer</Button>
             </DialogClose>
-            <Button onClick={() => setResponse("none")}>Add Another</Button>
+            <Button onClick={() => setResponse("none")}>Ajouter un autre</Button>
           </DialogFooter>
-          </div>
+        </div>
         }
       </DialogContent>
     </Dialog>

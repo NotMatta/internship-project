@@ -49,14 +49,14 @@ const PasswordsPage = () => {
 
   return (
     <div className="max-h-full flex flex-col gap-9">
-      <h1>Passwords</h1>
+      <h1>Mots de passe</h1>
       <table className="w-full border">
         <thead>
           <tr className="[&>th]:p-2 border [&>th]:text-start">
-            <th>Name</th>
-            <th>Password Strength</th>
-            <th>Password Age</th>
-            <th>Safety Level</th>
+            <th>Nom</th>
+            <th>Force du mot de passe</th>
+            <th>Ancienneté du mot de passe</th>
+            <th>Niveau de sécurité</th>
             <th>Actions</th>
           </tr>
         </thead>

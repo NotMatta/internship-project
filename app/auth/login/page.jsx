@@ -7,10 +7,10 @@ const LoginForm = () => {
   const {logIn} = useSession()
   return (
     <form className="flex flex-col w-full max-w-[400px] text-center p-4 border rounded-xl gap-2" action={logIn}>
-      <h2>Login</h2>
-      <Input type="email" placeholder="Email..." name="email" required/>
-      <Input type="password" placeholder="Password..." name="password" required/>
-      <Button type="submit">Login</Button>
+      <h2>Se connecter</h2>
+      <Input type="email" placeholder="E-mail..." name="email" required/>
+      <Input type="password" placeholder="Mot de passe..." name="password" required/>
+      <Button type="submit">Se connecter</Button>
     </form>
   )
 }

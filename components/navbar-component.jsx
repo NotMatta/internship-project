@@ -47,17 +47,17 @@ const NavbarContent = ({className}) => {
         </h2>
       </Link>
       <nav className="flex flex-col gap-2 lg:p-4">
-        <NavLink href="/main/dashboard" permission="READ_APPS"><LayoutDashboard/> Dashboard</NavLink>
+        <NavLink href="/main/dashboard" permission="READ_APPS"><LayoutDashboard/> Tableau de bord</NavLink>
         <NavLink href="/main/applications" permission="READ_APPS"><AppWindow/>Applications</NavLink>
-        <NavLink href="/main/passwords" permission="READ_APPS"><KeyRound/>Passwords</NavLink>
-        <NavLink href="/profile"><User/>Profile</NavLink>
-        {(permissions.includes("READ_USERS") || permissions.includes("READ_LOGS") || permissions.includes("READ_ROLES") || permissions.includes("MASTER")) && <p className="flex gap-2 px-2 py-3"><Shield/>Admin Panel</p>}
+        <NavLink href="/main/passwords" permission="READ_APPS"><KeyRound/>Mots de passe</NavLink>
+        <NavLink href="/profile"><User/>Profil</NavLink>
+        {(permissions.includes("READ_USERS") || permissions.includes("READ_LOGS") || permissions.includes("READ_ROLES") || permissions.includes("MASTER")) && <p className="flex gap-2 px-2 py-3"><Shield/>Panneau d'administration</p>}
         <div className="ml-8 space-y-2">
-          <NavLink href="/admin/users" permission="READ_USERS"><UserRound />Users</NavLink>
-          <NavLink href="/admin/roles" permission="READ_ROLES"><Tag />Roles</NavLink>
-          <NavLink href="/admin/logs" permission="READ_LOGS"><FileClock />Logs</NavLink>
+          <NavLink href="/admin/users" permission="READ_USERS"><UserRound />Utilisateurs</NavLink>
+          <NavLink href="/admin/roles" permission="READ_ROLES"><Tag />Rôles</NavLink>
+          <NavLink href="/admin/logs" permission="READ_LOGS"><FileClock />Journaux</NavLink>
         </div>
-        <button className="text-accent-foreground flex gap-2 px-2 py-3 rounded-xl hover:bg-accent hover:text-primary" onClick={signOut}><LogOut/>Sign out</button>
+        <button className="text-accent-foreground flex gap-2 px-2 py-3 rounded-xl hover:bg-accent hover:text-primary" onClick={signOut}><LogOut/>Se déconnecter</button>
       </nav>
     </div>
   )

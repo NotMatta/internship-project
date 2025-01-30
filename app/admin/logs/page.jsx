@@ -48,16 +48,16 @@ const LogsInput = ({setLogs}) => {
       setLoading(false)
       return
     }
-    toast({title:"Error",description:"Failed to fetch logs."})
+    toast({title:"Erreur",description:"Échec de la récupération des journaux."});
     setLoading(false)
   }
 
   return (
     <form className="flex gap-1 justify-center flex-wrap lg:flex-nowrap" onSubmit={handleSubmit}>
-      <Input name="search" placeholder="Search Logs" />
+      <Input name="search" placeholder="Rechercher dans les journaux" />
       <Select name="type">
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Action type" />
+          <SelectValue placeholder="Type d'action" />
         </SelectTrigger>
         <SelectContent>
           {actions.map((action) => (
@@ -66,9 +66,9 @@ const LogsInput = ({setLogs}) => {
             </SelectItem>
           ))}
         </SelectContent>
-      </Select>             
+      </Select>
       <DatePicker date={date} setDate={setDate} />
-      <Button disabled={loading}>{!loading ? "Search" : <Loader className="animate-spin repeat-infinite"/>}</Button>
+      <Button disabled={loading}>{!loading ? "Rechercher" : <Loader className="animate-spin repeat-infinite"/>}</Button>
     </form>
   )
 }
@@ -79,13 +79,13 @@ const LogsPage = () => {
   const {toast} = useToast()
   const {session} = useSession()
   if(!session.user.permissions.includes("READ_LOGS") && !session.user.permissions.includes("MASTER")){
-    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
-    redirect("/profile")
+    toast({title:"Non autorisé",description:"Vous n'avez pas la permission de voir cette page."});
+    redirect("/profile");
   }
   return (
     <div className="w-full flex flex-col gap-9 overflow-y-scroll h-full">
       <div className="flex justify-between items-center">
-        <h1>Logs Page</h1>
+        <h1>Page des journaux</h1>
         {logs.length > 10 && <div className="flex items-center gap-2 text-accent-foreground">
           <Button size="icon" onClick={() => setPage(page-1)} disabled={page == 1}><ChevronLeft/></Button>
           <p className="bg-accent rounded-xl w-8 h-10 flex items-center justify-center">{page}</p>
@@ -96,13 +96,13 @@ const LogsPage = () => {
       <div className="flex flex-col gap-3">
         {logs.slice((page-1)*10,page*10).map((log) => (
           <div key={log.id} className="flex flex-col gap-1 border p-4 bg-secondary rounded-xl">
-            <p><strong>Date:</strong> {(new Date(log.date)).toLocaleString()}</p>
-            <p><strong>Message:</strong> {log.message} {!log.userId && "(deleted user)"}</p>
-            <p><strong>Action:</strong> {log.action}</p>
+            <p><strong>Date :</strong> {(new Date(log.date)).toLocaleString()}</p>
+            <p><strong>Message :</strong> {log.message} {!log.userId && "(utilisateur supprimé)"}</p>
+            <p><strong>Action :</strong> {log.action}</p>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
 export default LogsPage

@@ -28,20 +28,19 @@ const DeleteApp = ({application}) => {
     const formData = new FormData(e.target);
     await deleteApplication.mutate(formData);
   }
-
   useEffect(() => {
     if(mutationStatus == "d_success"){
-      setMutationStatus("none")
-      toast({title:"Application deleted",description:"The application has been deleted"})
+      setMutationStatus("none");
+      toast({title:"Application supprimée",description:"L'application a été supprimée"});
     }
     if(mutationStatus == "d_error"){
-      setMutationStatus("none")
-      toast({title:"Failed to delete application",description:"An error occured while deleting the application"})
+      setMutationStatus("none");
+      toast({title:"Échec de la suppression de l'application",description:"Une erreur s'est produite lors de la suppression de l'application"});
     }
-  },[mutationStatus,setMutationStatus,toast])
-
-  if(!permissions.includes("WRITE_APPS") && !permissions.includes("MASTER")) return null
-
+  },[mutationStatus,setMutationStatus,toast]);
+  
+  if(!permissions.includes("WRITE_APPS") && !permissions.includes("MASTER")) return null;
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -50,22 +49,23 @@ const DeleteApp = ({application}) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Deleting an application</DialogTitle>
+            <DialogTitle>Supprimer une application</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Are you sure you want to delete the application?</DialogDescription>
+          <DialogDescription>Êtes-vous sûr de vouloir supprimer l&apos;application ?</DialogDescription>
           <input type="hidden" name="id" defaultValue={application.id}/>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Annuler</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Delete Application</Button>
+              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Supprimer l&apos;application</Button>
             </DialogClose>
           </DialogFooter>
-        </form>      
+        </form>
       </DialogContent>
     </Dialog>
   );
+
 }
 
 export default DeleteApp

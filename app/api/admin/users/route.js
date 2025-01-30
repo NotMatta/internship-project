@@ -16,30 +16,30 @@ export const GET = async (req) => {
 
 export const POST = async (req) => {
   return await handle(req,["WRITE_USERS"], async ({tokenRes}) => {
-    const body = await req.json()
-    const {name,email,password,roleId} = body
-    if(!name || !email || !password || !roleId){
-      console.log(name,email,password,roleId)
-      return Response.json("Bad Request", {status: 400})
+    const body = await req.json();
+    const {name,email,password,roleId} = body;
+    if(!name ||!email ||!password ||!roleId){
+      console.log(name,email,password,roleId);
+      return Response.json("Requête incorrecte", {status: 400});
     }
     if(!validateUsername(name).isValid){
-      return Response.json(validateUsername(name).message, {status: 400})
+      return Response.json(validateUsername(name).message, {status: 400});
     }
     if(!validatePassword(password).isValid){
-      return Response.json(validatePassword(password).message, {status: 400})
+      return Response.json(validatePassword(password).message, {status: 400});
     }
     if(!isValidEmail(email)){
-      return Response.json("Invalid Email", {status: 400})
+      return Response.json("Email invalide", {status: 400});
     }
     const roleIsMaster = await prisma.role.findFirst({
       where:{
         id: roleId
       }
-    })
-    if(roleIsMaster.name == "MASTER"){
-      return Response.json("Rejection", {status: 401})
+    });
+    if(roleIsMaster && roleIsMaster.name == "MASTER"){
+      return Response.json("Refus", {status: 401});
     }
-    const encyptedPassword = encryptData(password,secret)
+    const encyptedPassword = encryptData(password,secret);
     try{
       const newUser = await prisma.user.create({
         data: {
@@ -48,53 +48,53 @@ export const POST = async (req) => {
           password: encyptedPassword,
           roleId
         },include:{role:true}
-      })
+      });
       await prisma.log.create({
         data: {
-          message: `Created new user: "${name}" by "${tokenRes.body.user.name}"`,
+          message: `Nouvel utilisateur créé : « ${name} » par « ${tokenRes.body.user.name} »`,
           action: "CREATE_USER",
           userId: tokenRes.body.user.id
         }
-      })
-      return Response.json({...newUser,password}, {status: 201})
+      });
+      return Response.json({...newUser,password}, {status: 201});
     }catch(e){
-      return Response.json("User already exists", {status: 400})
+      return Response.json("L'utilisateur existe déjà", {status: 400});
     }
-  })
-}
+  });
+};
 
 export const PUT = async (req) => {
   return await handle(req,["WRITE_USERS"], async ({tokenRes}) => {
-    const body = await req.json()
-    const {id,name,email,password,roleId} = body
+    const body = await req.json();
+    const {id,name,email,password,roleId} = body;
     if(!id || !name || !email || !password || !roleId){
-      return Response.json("Bad Request", {status: 400})
+      return Response.json("Requête incorrecte", {status: 400});
     }
     if(!validateUsername(name).isValid){
-      return Response.json(validateUsername(name).message, {status: 400})
+      return Response.json(validateUsername(name).message, {status: 400});
     }
     if(!validatePassword(password).isValid){
-      return Response.json(validatePassword(password).message, {status: 400})
+      return Response.json(validatePassword(password).message, {status: 400});
     }
     if(!isValidEmail(email)){
-      return Response.json("Invalid Email", {status: 400})
+      return Response.json("Email invalide", {status: 400});
     }
     if(id == tokenRes.body.user.id){
-      return Response.json("You can't edit your own account, use Another.", {status: 401})
+      return Response.json("Vous ne pouvez pas modifier votre propre compte, veuillez en utiliser un autre.", {status: 401});
     }
-    const user = await prisma.user.findFirst({where:{id},include:{role:true}})
-    if(user.role.name == "MASTER"){
-      return Response.json("Rejection", {status: 401})
+    const user = await prisma.user.findFirst({where:{id},include:{role:true}});
+    if(user && user.role && user.role.name == "MASTER"){
+      return Response.json("Refus", {status: 401});
     }
     const roleIsMaster = await prisma.role.findFirst({
       where:{
         id: roleId
       }
-    })
-    if(roleIsMaster.name == "MASTER"){
-      return Response.json("Rejection", {status: 401})
+    });
+    if(roleIsMaster && roleIsMaster.name == "MASTER"){
+      return Response.json("Refus", {status: 401});
     }
-    const encyptedPassword = encryptData(password,secret)
+    const encyptedPassword = encryptData(password,secret);
     const updatedUser = await prisma.user.update({
       where: {id},
       data: {
@@ -103,45 +103,44 @@ export const PUT = async (req) => {
         password: encyptedPassword,
         roleId
       },include:{role:true}
-    })
+    });
     await prisma.log.create({
       data: {
-        message: `Updated user: "${name}" by "${tokenRes.body.user.name}"`,
+        message: `Utilisateur mis à jour : « ${name} » par « ${tokenRes.body.user.name} »`,
         action: "UPDATE_USER",
         userId: tokenRes.body.user.id
       }
-    })
-    return Response.json({...updatedUser,password}, {status: 200})
-  })
-}
+    });
+    return Response.json({...updatedUser,password}, {status: 200});
+  });
+};
 
 export const DELETE = async (req) => {
   return await handle(req,["WRITE_USERS"], async ({tokenRes}) => {
-    const { id } = await req.json()
+    const { id } = await req.json();
     if(!id){
-      return Response.json("Bad Request", {status: 400})
+      return Response.json("Requête incorrecte", {status: 400});
     }
     if(id == tokenRes.body.user.id){
-      return Response.json("You can't delete your own account, use Another.", {status: 401})
+      return Response.json("Vous ne pouvez pas supprimer votre propre compte, veuillez en utiliser un autre.", {status: 401});
     }
-    const FoundUser = await prisma.user.findFirst({where:{id},include:{role:true}})
-    if(FoundUser.role.name == "MASTER"){
-      return Response.json("Rejection", {status: 401})
+    const FoundUser = await prisma.user.findFirst({where:{id},include:{role:true}});
+    if(FoundUser && FoundUser.role && FoundUser.role.name == "MASTER"){
+      return Response.json("Refus", {status: 401});
     }
     await prisma.application.deleteMany({
       where: { userId: id },
-    })
+    });
     const deletedUser = await prisma.user.delete({
       where: {id },
-    })
+    });
     await prisma.log.create({
       data: {
-        message: `Deleted user: "${deletedUser.name}" by: "${tokenRes.body.user.name}"`,
+        message: `Utilisateur supprimé : « ${deletedUser.name} » par : « ${tokenRes.body.user.name} »`,
         action: "DELETE_USER",
         userId: tokenRes.body.user.id,
       }
-    })
-    return Response.json(deletedUser, {status: 200})
-  })
-}
-
+    });
+    return Response.json(deletedUser, {status: 200});
+  });
+};

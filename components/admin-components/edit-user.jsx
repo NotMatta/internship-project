@@ -36,7 +36,7 @@ const EditUser = ({user}) => {
     setMutationStatus("loading")
     const formData = new FormData(e.target);
     if(user.name == formData.get("name") && user.email == formData.get("email") && user.roleId == formData.get("roleId" && user.password == formData.get("password"))){
-      toast({title:"Invalid",description:"No changes made to the user"})
+      toast({title:"Invalide",description:"Aucune modification n'a été apportée à l'utilisateur"});
       setResponse("error");
       setMutationStatus("none")
       return
@@ -69,43 +69,43 @@ const EditUser = ({user}) => {
       <DialogContent>
         {res != "success" ? <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Editing a new user</DialogTitle>
+            <DialogTitle>Modifier un utilisateur</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Fill in the form below to edit a user</DialogDescription>
+          <DialogDescription>Remplissez le formulaire ci-dessous pour modifier un utilisateur</DialogDescription>
           <div className="space-y-2 mt-2">
             <input type="hidden" name="id" value={user.id}/>
-            <Input name="name" type="text" placeholder="Name" required defaultValue={user.name}/>
-            <Input name="email" type="email" placeholder="Email" required defaultValue={user.email}/>
+            <Input name="name" type="text" placeholder="Nom" required defaultValue={user.name}/>
+            <Input name="email" type="email" placeholder="E-mail" required defaultValue={user.email}/>
             <div className="flex gap-2">
-              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Password" required defaultValue={user.password}/>
+              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Mot de passe" required defaultValue={user.password}/>
               <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
             </div>
             <Select name="roleId" defaultValue={user.roleId} required={true}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Role" />
+                <SelectValue placeholder="Sélectionner un rôle" />
               </SelectTrigger>
               <SelectContent>
                 {roles.map((role) => <SelectItem key={role.id} value={role.id}>{role.name}</SelectItem>)}
               </SelectContent>
-            </Select>             
+            </Select>
           </div>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline" type="reset">Cancel</Button>
+              <Button variant="outline" type="reset">Annuler</Button>
             </DialogClose>
-            <Button type="submit" disabled={mutationStatus == "loading"}>Edit User</Button>
+            <Button type="submit" disabled={mutationStatus == "loading"}>Modifier l&apos;utilisateur</Button>
           </DialogFooter>
         </form>:
-          <div>
+        <div>
           <DialogHeader>
-            <DialogTitle>Successfully edited a user!</DialogTitle>
+            <DialogTitle>Utilisateur modifié avec succès !</DialogTitle>
           </DialogHeader>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline" onClick={() => setResponse("none")}>Close</Button>
+              <Button variant="outline" onClick={() => setResponse("none")}>Fermer</Button>
             </DialogClose>
           </DialogFooter>
-          </div>
+        </div>
         }
       </DialogContent>
     </Dialog>

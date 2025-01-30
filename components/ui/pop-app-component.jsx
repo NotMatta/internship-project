@@ -31,12 +31,12 @@ const PopApp = ({application}) => {
           <DialogDescription/>
         </DialogHeader>
         <div className="space-y-2">
-          <p><strong>Application Name:</strong> {application.name}</p>
-          <p><strong>Address:</strong> {application.address}</p>
-          <p><strong>Type:</strong> {application.type}</p>
-          <p><strong>Login:</strong> {application.login}</p>
+          <p><strong>Nom de l&apos;application :</strong> {application.name}</p>
+          <p><strong>Adresse :</strong> {application.address}</p>
+          <p><strong>Type :</strong> {application.type}</p>
+          <p><strong>Identifiant :</strong> {application.login}</p>
           <div className="flex gap-1 items-center">
-            <strong>Password:</strong>
+            <strong className="flex-shrink-0">Mot de passe :</strong>
             <Input type={!showPassword ? "password" : "text"} value={application.password} readOnly/>
             <Button onClick={() => setShowPassword(!showPassword)} className="flex-shrink-0" variant="outline" size="icon">
               {showPassword ? <Eye/> : <EyeClosed/>}
@@ -46,7 +46,7 @@ const PopApp = ({application}) => {
         <DialogFooter>
           <DialogClose asChild>
             <Button onClick={() => setShowPassword(false)}>
-              Close
+              Fermer
             </Button>
           </DialogClose>
         </DialogFooter>

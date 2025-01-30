@@ -63,56 +63,55 @@ const AddApp = () => {
       <DialogTrigger asChild>
         <Button size="icon"><Plus/></Button>
       </DialogTrigger>
-      <DialogContent>
-        {res != "success" ? <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Adding a new applicaion</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>Fill in the form below to add a new application</DialogDescription>
-          {res == "invalid" && <DialogDescription className="text-red-500">*Make sure you provide valid inputs</DialogDescription>}
-          <div className="space-y-2">
-            <div className="flex gap-2 items-center">
-              <Input name="logo" type="text" placeholder="Logo url ~ " value={logo} onChange={e => setLogo(e.target.value)}/>
-              <img src={logo ? logo : defaultLogo} alt="logo" className="w-12 h-12"/>
-            </div>
-            <Input name="name" type="text" placeholder="Application Name" required/>
-            <Input name="login" type="text" placeholder="Username / Email / Phone.." required/>
-            <div className="flex gap-2">
-              <Input name="address" type="text" placeholder="Address" required/>
+        <DialogContent>
+          {res != "success" ? <form onSubmit={handleSubmit}>
+            <DialogHeader>
+              <DialogTitle>Ajouter une nouvelle application</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>Remplissez le formulaire ci-dessous pour ajouter une nouvelle application</DialogDescription>
+            <div className="space-y-2">
+              <div className="flex gap-2 items-center">
+                <Input name="logo" type="text" placeholder="URL du logo ~ " value={logo} onChange={e => setLogo(e.target.value)}/>
+                <img src={logo ? logo : defaultLogo} alt="logo" className="w-12 h-12"/>
+              </div>
+              <Input name="name" type="text" placeholder="Nom de l'application" required/>
+              <Input name="login" type="text" placeholder="Nom d'utilisateur / E-mail / Téléphone..." required/>
+              <div className="flex gap-2">
+                <Input name="address" type="text" placeholder="Adresse" required/>
                 <Select name="type" required={true}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Address type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="URL">URL</SelectItem>
-                  <SelectItem value="IP">IP</SelectItem>
-                </SelectContent>
-              </Select>             
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Type d'adresse" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="URL">URL</SelectItem>
+                    <SelectItem value="IP">IP</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex gap-2">
+                <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Mot de passe" required/>
+                <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Password" required/>
-              <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
-            </div>
-          </div>
-          <DialogFooter className="pt-2">
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button type="submit" disabled={mutationStatus == "loading"}>Add Application</Button>
-          </DialogFooter>
-        </form>:
+            <DialogFooter className="pt-2">
+              <DialogClose asChild>
+                <Button variant="outline">Annuler</Button>
+              </DialogClose>
+              <Button type="submit" disabled={mutationStatus == "loading"}>Ajouter l&apos;application</Button>
+            </DialogFooter>
+          </form>:
           <div>
-          <DialogHeader>
-            <DialogTitle>Successfully added a new application!</DialogTitle>
-          </DialogHeader>
-          <DialogFooter className="pt-2">
-            <DialogClose asChild>
-              <Button variant="outline" onClick={() => setResponse("none")}>Close</Button>
-            </DialogClose>
-            <Button onClick={() => setResponse("none")}>Add Another</Button>
-          </DialogFooter>
+            <DialogHeader>
+              <DialogTitle>Application ajoutée avec succès !</DialogTitle>
+            </DialogHeader>
+            <DialogFooter className="pt-2">
+              <DialogClose asChild>
+                <Button variant="outline" onClick={() => setResponse("none")}>Fermer</Button>
+              </DialogClose>
+              <Button onClick={() => setResponse("none")}>Ajouter une autre</Button>
+            </DialogFooter>
           </div>
-        }
+          }
       </DialogContent>
     </Dialog>
   );

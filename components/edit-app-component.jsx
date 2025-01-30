@@ -36,10 +36,10 @@ const EditApp = ({application}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    if(application.name == formData.get("name") && application.login == formData.get("login") && application.password == formData.get("password") && application.logo == formData.get("logo") && application.address == formData.get("address") && application.type == formData.get("type")){
-      toast({title:"Invalid",description:"No changes made to the application"})
-      setResponse("error")
-      return
+    if (application.name == formData.get("name") && application.login == formData.get("login") && application.password == formData.get("password") && application.logo == formData.get("logo") && application.address == formData.get("address") && application.type == formData.get("type")) {
+      toast({ title: "Invalide", description: "Aucune modification n'a été apportée à l'application" });
+      setResponse("error");
+      return;
     }
     setMutationStatus("loading")
     await editApplication.mutate(formData);
@@ -67,51 +67,51 @@ const EditApp = ({application}) => {
       <DialogContent>
         {res != "success" ? <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Editing an application</DialogTitle>
+            <DialogTitle>Modifier une application</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Fill in the form below to edit this application</DialogDescription>
+          <DialogDescription>Remplissez le formulaire ci-dessous pour modifier cette application</DialogDescription>
           <div className="space-y-2">
             <input type="hidden" name="id" defaultValue={application.id}/>
             <div className="flex gap-2 items-center">
-              <Input name="logo" type="text" placeholder="Logo url ~ " value={logo} onChange={e => setLogo(e.target.value)}/>
+              <Input name="logo" type="text" placeholder="URL du logo ~ " value={logo} onChange={e => setLogo(e.target.value)}/>
               <img src={logo ? logo : "https://cdn.icon-icons.com/icons2/2483/PNG/512/application_icon_149973.png"} alt="logo" className="w-12 h-12"/>
             </div>
-            <Input name="name" type="text" placeholder="Application Name" required defaultValue={application.name}/>
+            <Input name="name" type="text" placeholder="Nom de l'application" required defaultValue={application.name}/>
             <div className="flex gap-2">
-              <Input name="address" type="text" placeholder="Address" required defaultValue={application.address}/>
-                <Select name="type" required={true} defaultValue={application.type}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Address type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="URL">URL</SelectItem>
-                    <SelectItem value="IP">IP</SelectItem>
-                  </SelectContent>
-                </Select>             
+              <Input name="address" type="text" placeholder="Adresse" required defaultValue={application.address}/>
+              <Select name="type" required={true} defaultValue={application.type}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Type d'adresse" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="URL">URL</SelectItem>
+                  <SelectItem value="IP">IP</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Input name="login" type="text" placeholder="Username / Email / Phone.." required defaultValue={application.login}/>
+            <Input name="login" type="text" placeholder="Nom d'utilisateur / E-mail / Téléphone.." required defaultValue={application.login}/>
             <div className="flex gap-2">
-              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Password" required defaultValue={application.password}/>
+              <Input name="password" type={displayPassword ? "text" : "password"} placeholder="Mot de passe" required defaultValue={application.password}/>
               <Button type="button" variant="outline" onClick={() => setDisplayPassword(!displayPassword)} size="icon">{displayPassword ? <Eye/> : <EyeOff/>}</Button>
             </div>
           </div>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Annuler</Button>
             </DialogClose>
-            <Button type="submit" disabled={mutationStatus == "loading"}>Save Edit</Button>
+            <Button type="submit" disabled={mutationStatus == "loading"}>Enregistrer les modifications</Button>
           </DialogFooter>
         </form>:
-          <div>
+        <div>
           <DialogHeader>
-            <DialogTitle>Successfully Saved the edit!</DialogTitle>
+            <DialogTitle>Modifications enregistrées avec succès !</DialogTitle>
           </DialogHeader>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button onClick={() => setResponse("none")}>Close</Button>
+              <Button onClick={() => setResponse("none")}>Fermer</Button>
             </DialogClose>
           </DialogFooter>
-          </div>
+        </div>
         }
       </DialogContent>
     </Dialog>

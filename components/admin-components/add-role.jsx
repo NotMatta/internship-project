@@ -53,12 +53,12 @@ const AddRole = () => {
           <Button size="icon"><Plus/></Button>
         </DialogTrigger>
         <DialogContent>
-        {res != "success" ? <form onSubmit={handleSubmit}>
+          {res != "success" ? <form onSubmit={handleSubmit}>
             <DialogHeader>
-              <DialogTitle>Adding a new role</DialogTitle>
+              <DialogTitle>Ajouter un nouveau rôle</DialogTitle>
             </DialogHeader>
-            <DialogDescription>Fill the form below to add a new role</DialogDescription>
-            <Input type="text" placeholder="Role name..." name="name" required/>
+            <DialogDescription>Remplissez le formulaire ci-dessous pour ajouter un nouveau rôle</DialogDescription>
+            <Input type="text" placeholder="Nom du rôle..." name="name" required/>
             <p className="text-lg">Permissions</p>
             <div className="grid grid-cols-2 gap-4 text-sm">
               {["READ_USERS","WRITE_USERS","READ_APPS","WRITE_APPS","READ_ROLES","WRITE_ROLES","READ_LOGS"].map((permission) => (
@@ -70,20 +70,20 @@ const AddRole = () => {
             </div>
             <DialogFooter className="pt-2">
               <DialogClose asChild>
-                <Button variant="outline" type="reset">Cancel</Button>
+                <Button variant="outline" type="reset">Annuler</Button>
               </DialogClose>
-              <Button type="submit" disabled={mutationStatus == "loading"}>Add role</Button>
+              <Button type="submit" disabled={mutationStatus == "loading"}>Ajouter un rôle</Button>
             </DialogFooter>
           </form> : <div className="flex flex-col items-center gap-4">
-          <DialogHeader>
-            <DialogTitle>Successfully added a new role!</DialogTitle>
-          </DialogHeader>
-          <DialogFooter className="pt-2">
-            <DialogClose asChild>
-              <Button variant="outline" onClick={() => setResponse("none")}>Close</Button>
-            </DialogClose>
-            <Button onClick={() => setResponse("none")}>Add Another Role</Button>
-          </DialogFooter>
+            <DialogHeader>
+              <DialogTitle>Rôle ajouté avec succès !</DialogTitle>
+            </DialogHeader>
+            <DialogFooter className="pt-2">
+              <DialogClose asChild>
+                <Button variant="outline" onClick={() => setResponse("none")}>Fermer</Button>
+              </DialogClose>
+              <Button onClick={() => setResponse("none")}>Ajouter un autre rôle</Button>
+            </DialogFooter>
           </div>}
         </DialogContent>
       </Dialog>

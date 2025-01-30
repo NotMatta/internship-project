@@ -8,21 +8,20 @@ import { useAdmin } from "@/components/providers/admin-provider"
 import { redirect } from "next/navigation"
 
 const UsersPage = () => {
-
-  const {toast} = useToast()
-  const {session} = useSession()
+  const {toast} = useToast();
+  const {session} = useSession();
   if(!session.user.permissions.includes("READ_USERS") && !session.user.permissions.includes("MASTER")){
-    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
-    redirect("/profile")
+    toast({title:"Non autorisé",description:"Vous n'avez pas la permission de voir cette page."});
+    redirect("/profile");
   }
-
-  const users = useAdmin().users
-
-  if(!users) return <div>Loading...</div>
+  
+  const users = useAdmin().users;
+  
+  if(!users) return <div>Chargement...</div>;
   return(
     <div className="flex flex-col gap-9 overflow-y-scroll max-h-full">
       <div className="flex justify-between items-center">
-        <h1>Manage Users</h1>
+        <h1>Gérer les utilisateurs</h1>
         <AddUser/>
       </div>
       <div className="flex flex-col gap-2">
@@ -31,7 +30,7 @@ const UsersPage = () => {
             <div>
               <h4>{user.name}</h4>
               <p>{user.email}</p>
-              <p>Role: {user.role.name}</p>
+              <p>Rôle : {user.role.name}</p>
             </div>
             <div className="space-x-2">
               <EditUser user={user}/>
@@ -41,7 +40,7 @@ const UsersPage = () => {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export default UsersPage

@@ -11,7 +11,7 @@ const RolesPage = () => {
   const {session} = useSession()
   const {toast} = useToast()
   if(!session.user.permissions.includes("READ_ROLES") && !session.user.permissions.includes("MASTER")){
-    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
+    toast({title:"Non autorisé",description:"Vous n'avez pas la permission de voir cette page."});
     redirect("/profile")
   }
   const roles = useAdmin().roles
@@ -20,7 +20,7 @@ const RolesPage = () => {
   return(
     <div className="flex flex-col gap-9 overflow-y-scroll max-h-full">
       <div className="flex justify-between">
-        <h1>Roles</h1>
+        <h1>Rôles</h1>
         <AddRole/>
       </div>
       <div className="flex flex-col gap-2">

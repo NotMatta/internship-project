@@ -27,7 +27,7 @@ const EditRole = ({role}) => {
     setMutationStatus("loading")
     const formData = new FormData(e.target);
     if(role.name == formData.get("name") && role.permissions == formData.get("permissions")){
-      toast({title:"Invalid",description:"No changes made to the role"})
+      toast({title:"Invalide",description:"Aucune modification n'a été apportée au rôle"});
       setResponse("invalid");
       setMutationStatus("none")
       return
@@ -58,11 +58,11 @@ const EditRole = ({role}) => {
         <Button size="icon"><SquarePen/></Button>
       </DialogTrigger>
       <DialogContent>
-      {res != "success" ? <form onSubmit={handleSubmit}>
+        {res != "success" ? <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Editing a role</DialogTitle>
+            <DialogTitle>Modifier un rôle</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Fill the form below to edit the role</DialogDescription>
+          <DialogDescription>Remplissez le formulaire ci-dessous pour modifier le rôle</DialogDescription>
           <input type="hidden" name="id" value={role.id}/>
           <Input name="name" defaultValue={role.name}/>
           <p className="text-sm text-gray-500">Permissions</p>
@@ -76,20 +76,20 @@ const EditRole = ({role}) => {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" type="reset">Cancel</Button>
+              <Button variant="outline" type="reset">Annuler</Button>
             </DialogClose>
-            <Button type="submit" disabled={mutationStatus == "loading"}>Edit</Button>
+            <Button type="submit" disabled={mutationStatus == "loading"}>Modifier</Button>
           </DialogFooter>
         </form> : <div className="flex flex-col items-center gap-4">
-        <DialogHeader>
-          <DialogTitle>Successfully edited the role!</DialogTitle>
-        </DialogHeader>
-        <DialogFooter className="pt-2">
-          <DialogClose asChild>
-            <Button variant="outline" onClick={() => setResponse("none")}>Close</Button>
-          </DialogClose>
-        </DialogFooter>
-      </div>}
+          <DialogHeader>
+            <DialogTitle>Rôle modifié avec succès !</DialogTitle>
+          </DialogHeader>
+          <DialogFooter className="pt-2">
+            <DialogClose asChild>
+              <Button variant="outline" onClick={() => setResponse("none")}>Fermer</Button>
+            </DialogClose>
+          </DialogFooter>
+        </div>}
       </DialogContent>
     </Dialog>
   )

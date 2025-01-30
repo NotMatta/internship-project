@@ -31,13 +31,13 @@ const DeleteUser = ({user}) => {
 
   useEffect(() => {
     if(mutationStatus == "ud_success"){
-      setMutationStatus("none")
-      toast({title:"User deleted",description:"The user has been deleted"})
+      setMutationStatus("none");
+      toast({title:"Utilisateur supprimé",description:"L'utilisateur a été supprimé"});
     }
     if(mutationStatus == "ud_error"){
-      setMutationStatus("none")
+      setMutationStatus("none");
     }
-  },[mutationStatus,setMutationStatus,toast])
+  },[mutationStatus,setMutationStatus,toast]);
 
   if(!permissions.includes("WRITE_USERS") && !permissions.includes("MASTER")) return null
 
@@ -49,19 +49,19 @@ const DeleteUser = ({user}) => {
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Deleting an user</DialogTitle>
+            <DialogTitle>Supprimer un utilisateur</DialogTitle>
           </DialogHeader>
-          <DialogDescription>Are you sure you want to delete the user?</DialogDescription>
+          <DialogDescription>Êtes-vous sûr de vouloir supprimer l&apos;utilisateur ?</DialogDescription>
           <input type="hidden" name="id" defaultValue={user.id}/>
           <DialogFooter className="pt-2">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">Annuler</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Delete User</Button>
+              <Button type="submit" variant="destructive" disabled={mutationStatus == "loading"}>Supprimer l&apos;utilisateur</Button>
             </DialogClose>
           </DialogFooter>
-        </form>      
+        </form>
       </DialogContent>
     </Dialog>
   );

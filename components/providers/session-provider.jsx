@@ -1,7 +1,7 @@
 "use client"
 import { createContext, useState, useEffect, useContext } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { validatePassword, validateUsername } from "@/lib/utils";
+import { validatePassword, isValidEmail} from "@/lib/utils";
 
 const SessionContext = createContext();
 
@@ -44,39 +44,39 @@ const SessionProvider = ({ children }) => {
   }, []);
 
   const editPassword = (formData) => {
-    const body = {
-      password:formData.get("password"),
-      newPassword:formData.get("newPassword"),
-      confirmPassword:formData.get("confirmPassword")
-    }
+  const body = {
+    password:formData.get("password"),
+    newPassword:formData.get("newPassword"),
+    confirmPassword:formData.get("confirmPassword")
+  };
 
-    if(body.newPassword !== body.confirmPassword){
-      toast({title:"Invalid credentials",description:"Passwords do not match"})
-      return
-    }
-
-    if(!validatePassword(body.newPassword).isValid){
-      toast({title:"Invalid credentials",description:validatePassword(body.password).message})
-      return
-    }
-
-    fetch("/api/auth/update", {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
-      body: JSON.stringify(body),
-    })
-
-    .then((res) => {
-      if(res.ok) {
-        toast({title:"Password updated",description:"Your password has been updated"})
-        return
-      }
-      const message = res.json()
-      toast({title:"Couldn't update password",description:message})
-    })
+  if(body.newPassword!== body.confirmPassword){
+    toast({title:"Identifiants invalides",description:"Les mots de passe ne correspondent pas"});
+    return;
   }
+
+  if(!validatePassword(body.newPassword).isValid){
+    toast({title:"Identifiants invalides",description:validatePassword(body.newPassword).message});
+    return;
+  }
+
+  fetch("/api/auth/update", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${session.token}`,
+    },
+    body: JSON.stringify(body),
+  })
+
+.then((res) => {
+    if(res.ok) {
+      toast({title:"Mot de passe mis à jour",description:"Votre mot de passe a été mis à jour"});
+      return;
+    }
+    const message = res.json();
+    toast({title:"Impossible de mettre à jour le mot de passe",description:message});
+  });
+};
 
   const signOut = () => {
     localStorage.removeItem("session");

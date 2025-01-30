@@ -10,7 +10,7 @@ const MainLayout = ({ children }) => {
   const {toast} = useToast()
   if(session.status == "unauthenticated") redirect("/auth/login")
   if(!session.user.permissions.includes("READ_APPS") && !session.user.permissions.includes("MASTER")){
-    toast({title:"Unauthorized",description:"You do not have permission to view this page."})
+    toast({title:"Non autorisé",description:"Vous n'avez pas la permission de voir cette page."});
     redirect("/profile")
   }
   if (session.status === "loading") return <div>Loading...</div>

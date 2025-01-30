@@ -15,18 +15,18 @@ export const GET = async (req) => {
 
 export const POST = async (req) => {
   return handle(req,["WRITE_APPS"],async ({tokenRes}) => {
-    const body = await req.json()
-    const {logo,name,address,type,login,password} = body
-      if(!logo || !name || !address || !type || !login || !password){
-      return Response.json("Bad Request", {status: 400})
+    const body = await req.json();
+    const {logo,name,address,type,login,password} = body;
+    if(!logo || !name || !address || !type || !login || !password){
+      return Response.json("Requête incorrecte", {status: 400});
     }
     if(!isValidURL(logo)){
-      return Response.json("Invalid Logo URL", {status: 400})
+      return Response.json("URL du logo invalide", {status: 400});
     }
     if(type == "URL" && !isValidURL(address) || type == "IP" && !isValidIP(address)){
-      return Response.json("Invalid address", {status: 400})
+      return Response.json("Adresse invalide", {status: 400});
     }
-    const encyptedPassword = encryptData(password,secret)
+    const encyptedPassword = encryptData(password,secret);
     const newApplication = await prisma.application.create({
       data: {
         name,
@@ -37,31 +37,32 @@ export const POST = async (req) => {
         password: encyptedPassword,
         userId: tokenRes.body.user.id
       }
-    })
+    });
     await prisma.log.create({
       data: {
-        message: `Created new application: "${name}" by "${tokenRes.body.user.name}"`,
+        message: `Nouvelle application créée : « ${name} » par « ${tokenRes.body.user.name} »`,
         action: "CREATE_APP",
         userId: tokenRes.body.user.id
       }
-    })
-    return Response.json({...newApplication,password}, {status: 201})
-  })
-}
+    });
+    return Response.json({...newApplication,password}, {status: 201});
+  });
+};
+
 export const PUT = async (req) => {
   return handle(req,["WRITE_APPS"],async ({tokenRes}) => {
-    const body = await req.json()
-    const {logo,name,address,type,login,password,id} = body
+    const body = await req.json();
+    const {logo,name,address,type,login,password,id} = body;
     if(!logo || !name || !address || !type || !login || !password || !id){
-      return Response.json("Bad Request", {status: 400})
+      return Response.json("Requête incorrecte", {status: 400});
     }
     if(!isValidURL(logo)){
-      return Response.json("Invalid Logo URL", {status: 400})
+      return Response.json("URL du logo invalide", {status: 400});
     }
     if(type == "URL" && !isValidURL(address) || type == "IP" && !isValidIP(address)){
-      return Response.json("Invalid address", {status: 400})
+      return Response.json("Adresse invalide", {status: 400});
     }
-    const encyptedPassword = encryptData(password,secret)
+    const encyptedPassword = encryptData(password,secret);
     const updatedApplication = await prisma.application.update({
       where: {id, userId: tokenRes.body.user.id},
       data: {
@@ -73,35 +74,35 @@ export const PUT = async (req) => {
         password: encyptedPassword,
         updatedAt: new Date()
       }
-    })
+    });
     await prisma.log.create({
       data: {
-        message: `Updated application: "${name}" by "${tokenRes.body.user.name}"`,
+        message: `Application mise à jour : « ${name} » par « ${tokenRes.body.user.name} »`,
         action: "UPDATE_APP",
         userId: tokenRes.body.user.id
       }
-    })
-    return Response.json({...updatedApplication,password}, {status: 202})
-  })
-}
+    });
+    return Response.json({...updatedApplication,password}, {status: 202});
+  });
+};
 
 export const DELETE = async (req) => {
   return handle(req,["WRITE_APPS"],async ({tokenRes}) => {
-    const body = await req.json()
-    const {id} = {id:body.id}
+    const body = await req.json();
+    const {id} = {id:body.id};
     if(!id){
-      return Response.json("id is required", {status: 400})
+      return Response.json("L'identifiant est requis", {status: 400});
     }
     const deletedApplication = await prisma.application.delete({
       where: {id, userId: tokenRes.body.user.id}
-    })
+    });
     await prisma.log.create({
       data: {
-        message: `Deleted application: "${deletedApplication.name}" by "${tokenRes.body.user.name}"`,
+        message: `Application supprimée : « ${deletedApplication.name} » par « ${tokenRes.body.user.name} »`,
         action: "DELETE_APP",
         userId: tokenRes.body.user.id,
       }
-    })
-    return Response.json(deletedApplication, {status: 200})
-  })
-}
+    });
+    return Response.json(deletedApplication, {status: 200});
+  });
+};
