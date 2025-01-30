@@ -51,7 +51,8 @@ const NavbarContent = ({className}) => {
         <NavLink href="/main/applications" permission="READ_APPS"><AppWindow/>Applications</NavLink>
         <NavLink href="/main/passwords" permission="READ_APPS"><KeyRound/>Mots de passe</NavLink>
         <NavLink href="/profile"><User/>Profil</NavLink>
-        {(permissions.includes("READ_USERS") || permissions.includes("READ_LOGS") || permissions.includes("READ_ROLES") || permissions.includes("MASTER")) && <p className="flex gap-2 px-2 py-3"><Shield/>Panneau d'administration</p>}
+        {(permissions.includes("READ_USERS") || permissions.includes("READ_LOGS") || permissions.includes("READ_ROLES") || permissions.includes("MASTER")) && 
+          <p className="flex gap-2 px-2 py-3"><Shield/>Panneau d&apos;administration</p>}
         <div className="ml-8 space-y-2">
           <NavLink href="/admin/users" permission="READ_USERS"><UserRound />Utilisateurs</NavLink>
           <NavLink href="/admin/roles" permission="READ_ROLES"><Tag />Rôles</NavLink>
