@@ -29,7 +29,7 @@ A secure password management application designed to simplify password storage a
     *   Create a `.env` file in the root directory.
     *   Set the following variables:
         *   `DATABASE_URL`: The URL for your PostgreSQL database.
-        *   `PASSWORD_ENCRYPTION_SECRET`: A secret key for encrypting passwords.
+        *   `SECRET`: A secret key for encrypting passwords.
         *   `JWT_SECRET`: A secret key for encrypting JWT tokens.
         *   `MASTER_PASSWORD`: The initial password for the master account.
 5.  Prepare the database: `npx prisma migrate dev` (or `npx prisma db push` for development)
